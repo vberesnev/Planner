@@ -63,6 +63,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\DateOperations.cs" />
+    <Compile Include="Model\DoublyNode.cs" />
+    <Compile Include="Model\DoublyNodeLinkedList.cs" />
     <Compile Include="Model\Important.cs" />
     <Compile Include="Model\Target.cs" />
     <Compile Include="Model\TargetTask.cs" />

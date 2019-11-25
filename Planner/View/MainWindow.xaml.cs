@@ -66,5 +66,41 @@ namespace Planner
         {
             this.DragMove();
         }
+
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+
+            this.MenuCell0.Background = null;
+            this.MenuCell1.Background = null;
+            this.MenuCell2.Background = null;
+            this.MenuCell3.Background = null;
+            this.MenuCell4.Background = null;
+            this.MenuCell5.Background = null;
+
+            switch (index)
+            {
+                case 0:
+                    this.MenuCell0.Background = Brushes.CornflowerBlue;
+                    break;
+                case 1:
+                    this.MenuCell1.Background = Brushes.CornflowerBlue;
+                    break;
+                case 2:
+                    this.MenuCell2.Background = Brushes.CornflowerBlue;
+                    break;
+                case 3:
+                    this.MenuCell3.Background = Brushes.CornflowerBlue;
+                    break;
+                case 4:
+                    this.MenuCell4.Background = Brushes.IndianRed;
+                    break;
+                case 5:
+                    this.MenuCell5.Background = Brushes.ForestGreen;
+                    break;
+            }
+            
+            
+        }
     }
 }

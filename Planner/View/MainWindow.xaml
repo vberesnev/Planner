@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Planner"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen">
-    <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="True" Background="Snow">
         <DockPanel DockPanel.Dock="Top"
                    LastChildFill="True"
                    x:Name="Header"
@@ -55,15 +55,42 @@
             </Grid>
             <TextBlock/>
         </DockPanel>
+        <Grid DockPanel.Dock="Top" Height="45" x:Name="Menu">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Button Uid="0" Grid.Column="0" Style="{StaticResource MenuButtonsStyle}" Content="ГОД" Click="MenuButton_Click"/>
+            <Button Uid="1" Grid.Column="1" Style="{StaticResource MenuButtonsStyle}" Content="МЕСЯЦ" Click="MenuButton_Click"/>
+            <Button Uid="2" Grid.Column="2" Style="{StaticResource MenuButtonsStyle}" Content="НЕДЕЛЯ" Click="MenuButton_Click"/>
+            <Button Uid="3" Grid.Column="3" Style="{StaticResource MenuButtonsStyle}" Content="ДЕНЬ" Click="MenuButton_Click"/>
+            <Button Uid="4" Grid.Column="4" Style="{StaticResource MenuButtonRedStyle}" Content="ПРОСРОЧЕННЫЕ" Click="MenuButton_Click"/>
+            <Button Uid="5" Grid.Column="5" Style="{StaticResource MenuButtonGreenStyle}" Content="ЗАВЕРШЕННЫЕ" Click="MenuButton_Click"/>
+            <Grid x:Name="MenuCell0" Grid.Column="0" Grid.Row="1"/>
+            <Grid x:Name="MenuCell1" Grid.Column="1" Grid.Row="1"/>
+            <Grid x:Name="MenuCell2" Grid.Column="2" Grid.Row="1"/>
+            <Grid x:Name="MenuCell3" Grid.Column="3" Grid.Row="1"/>
+            <Grid x:Name="MenuCell4" Grid.Column="4" Grid.Row="1"/>
+            <Grid x:Name="MenuCell5" Grid.Column="5" Grid.Row="1"/>
+        </Grid>
         <DockPanel DockPanel.Dock="Bottom"
                    x:Name="Footer"
                    Background="Blue"
                    Height="50"
                     >
         </DockPanel>
-        <Grid DockPanel.Dock="Top"
+        <StackPanel DockPanel.Dock="Top"
               x:Name="Content"
-              Background="Gray"
-              />
+              >
+            
+        </StackPanel>
     </DockPanel>
 </Window>

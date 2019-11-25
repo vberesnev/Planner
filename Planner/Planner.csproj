@@ -59,6 +59,9 @@
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TargetWindow.xaml.cs">
+      <DependentUpon>TargetWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,6 +83,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TargetWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -123,6 +130,9 @@
     <Resource Include="Resources\calendar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\white_plus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

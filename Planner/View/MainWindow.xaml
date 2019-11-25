@@ -14,11 +14,12 @@
                    MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
             <TextBlock DockPanel.Dock="Left"
                         x:Name="Logo"
-                        Text="Planner"
+                        Text="p l a n n e r"
                         Margin="10 0"
                         FontSize="24"
                         FontWeight="Bold"
                         FontFamily="Luminari"
+                       Foreground="DarkBlue"
                         VerticalAlignment="Center">
             </TextBlock>
             <Grid DockPanel.Dock="Right"
@@ -87,10 +88,20 @@
                    Height="50"
                     >
         </DockPanel>
-        <StackPanel DockPanel.Dock="Top"
-              x:Name="Content"
-              >
-            
-        </StackPanel>
+        <Grid DockPanel.Dock="Top"
+              x:Name="Content">
+
+            <Button x:Name="PlusButton" 
+                Panel.ZIndex="100"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                ToolTip="Создать задачу"
+            Style="{StaticResource RoundedButtonStyle}"
+            Command="">
+                <Image Source="/Resources/white_plus.png"
+                Width="30" Height="30"
+                Margin="0"/>
+            </Button>
+        </Grid>
     </DockPanel>
 </Window>

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Planner.ViewModel;
 
 
 namespace Planner
@@ -25,6 +26,8 @@ namespace Planner
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainViewModel();
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("calendar.ico");

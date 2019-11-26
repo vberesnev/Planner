@@ -82,11 +82,32 @@
             <Grid x:Name="MenuCell4" Grid.Column="4" Grid.Row="1"/>
             <Grid x:Name="MenuCell5" Grid.Column="5" Grid.Row="1"/>
         </Grid>
+        <StackPanel DockPanel.Dock="Top" 
+              x:Name="YearFilterPanel"
+              Orientation="Horizontal"
+              Height="40"
+              Margin="10 5">
+            <Button  Style="{StaticResource ControlButtonsStyle}"
+                     Command="{Binding PreviousYearCommand}">
+                <Image Source="/Resources/arrow_left.png"
+                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+            </Button>
+            <TextBlock Style="{StaticResource NotSelectedCaruselTextBlockValue}" 
+                       Text="{Binding PreviousYear.Data}"/>
+            <TextBlock Style="{StaticResource SelectedCaruselTextBlockValue}" 
+                       Text="{Binding CurrentYear.Data}"/>
+            <TextBlock Style="{StaticResource NotSelectedCaruselTextBlockValue}"
+                       Text="{Binding NextYear.Data}"/>
+            <Button  Style="{StaticResource ControlButtonsStyle}"
+                     Command="{Binding NextYearCommand}">
+                <Image Source="/Resources/arrow_right.png"
+                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+            </Button>
+        </StackPanel>
         <DockPanel DockPanel.Dock="Bottom"
                    x:Name="Footer"
                    Background="Blue"
-                   Height="50"
-                    >
+                   Height="50">
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">

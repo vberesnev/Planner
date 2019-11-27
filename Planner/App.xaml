@@ -135,7 +135,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="35" Background="CornflowerBlue" BorderThickness="4" BorderBrush="DarkBlue" Padding="2">
+                        <Border CornerRadius="35" Background="#25B7D3" BorderThickness="4" BorderBrush="#25A7D3" Padding="2">
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center"/>
                         </Border>

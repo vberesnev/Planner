@@ -12,6 +12,7 @@ namespace Planner.ViewModel
     public class MainViewModel : INotifyPropertyChanged
     {
 
+        #region Карусель ГОД
         private RelayCommand previousYearCommand;
         public RelayCommand PreviousYearCommand
         {
@@ -21,8 +22,6 @@ namespace Planner.ViewModel
                   (previousYearCommand = new RelayCommand(obj =>
                   {
                       CurrentYear = yearsList.MovePrevious();
-                      PreviousYear = CurrentYear.Previous;
-                      NextYear = CurrentYear.Next;
                   }));
             }
         }
@@ -36,32 +35,7 @@ namespace Planner.ViewModel
                   (nextYearCommand = new RelayCommand(obj =>
                   {
                       CurrentYear = yearsList.MoveNext();
-                      PreviousYear = CurrentYear.Previous;
-                      NextYear = CurrentYear.Next;
                   }));
-            }
-        }
-
-
-        private DoublyNode<int> previousYear;
-        public DoublyNode<int> PreviousYear
-        {
-            get { return previousYear; }
-            set
-            {
-                previousYear = value;
-                OnPropertyChanged("PreviousYear");
-            }
-        }
-
-        private DoublyNode<int> nextYear;
-        public DoublyNode<int> NextYear
-        {
-            get { return nextYear; }
-            set
-            {
-                nextYear = value;
-                OnPropertyChanged("NextYear");
             }
         }
 
@@ -75,61 +49,220 @@ namespace Planner.ViewModel
                 OnPropertyChanged("CurrentYear");
             }
         }
+        #endregion
+
+        #region Карусель МЕСЯЦ
+        private RelayCommand previousMonthCommand;
+        public RelayCommand PreviousMonthCommand
+        {
+            get
+            {
+                return previousMonthCommand ??
+                  (previousMonthCommand = new RelayCommand(obj =>
+                  {
+                      CurrentMonth = monthsList.MovePrevious();
+                  }));
+            }
+        }
+
+        private RelayCommand nextMonthCommand;
+        public RelayCommand NextMonthCommand
+        {
+            get
+            {
+                return nextMonthCommand ??
+                  (nextMonthCommand = new RelayCommand(obj =>
+                  {
+                      CurrentMonth = monthsList.MoveNext();
+                  }));
+            }
+        }
+
+        private DoublyNode<DateValue> currentMonth;
+        public DoublyNode<DateValue> CurrentMonth
+        {
+            get { return currentMonth; }
+            set
+            {
+                currentMonth = value;
+                OnPropertyChanged("CurrentMonth");
+            }
+        }
+        #endregion
+
+        #region Карусель НЕДЕЛЯ
+        private RelayCommand previousWeekommand;
+        public RelayCommand PreviousWeekCommand
+        {
+            get
+            {
+                return previousWeekommand ??
+                  (previousWeekommand = new RelayCommand(obj =>
+                  {
+                      CurrentWeek = weeksList.MovePrevious();
+                  }));
+            }
+        }
+
+        private RelayCommand nextWeekCommand;
+        public RelayCommand NextWeekCommand
+        {
+            get
+            {
+                return nextWeekCommand ??
+                  (nextWeekCommand = new RelayCommand(obj =>
+                  {
+                      CurrentWeek = weeksList.MoveNext();
+                  }));
+            }
+        }
+
+        private DoublyNode<DateValue> currentWeek;
+        public DoublyNode<DateValue> CurrentWeek
+        {
+            get { return currentWeek; }
+            set
+            {
+                currentWeek = value;
+                OnPropertyChanged("CurrentWeek");
+            }
+        }
+        #endregion
+
+        #region Карусель ДЕНЬ
+        private RelayCommand previousDaykommand;
+        public RelayCommand PreviousDayCommand
+        {
+            get
+            {
+                return previousDaykommand ??
+                  (previousDaykommand = new RelayCommand(obj =>
+                  {
+                      CurrentDay = daysList.MovePrevious();
+                  }));
+            }
+        }
+
+        private RelayCommand nextDayCommand;
+        public RelayCommand NextDayCommand
+        {
+            get
+            {
+                return nextDayCommand ??
+                  (nextDayCommand = new RelayCommand(obj =>
+                  {
+                      CurrentDay = daysList.MoveNext();
+                  }));
+            }
+        }
+
+        private DoublyNode<DateValue> currentDay;
+        public DoublyNode<DateValue> CurrentDay
+        {
+            get { return currentDay; }
+            set
+            {
+                currentDay = value;
+                OnPropertyChanged("CurrentDay");
+            }
+        }
+        #endregion
 
         private DoublyNodeLinkedList<int> yearsList;
         private DoublyNodeLinkedList<DateValue> monthsList;
-        private DoublyNodeLinkedList<int> weeksList;
-        private DoublyNodeLinkedList<int> daysList;
+        private DoublyNodeLinkedList<DateValue> weeksList;
+        private DoublyNodeLinkedList<DateValue> daysList;
 
         public MainViewModel()
         {
-            FillYearList(DateTime.Now);
-            FillMonthsList();
+            FillYearList(DateTime.Now.Year);
+            FillMonthsList(DateTime.Now.Year);
+            FillWeeksList(DateTime.Now.Year);
+            FillDaysList(DateTime.Now.Year);
 
             CurrentYear = yearsList.Current(DateTime.Now.Year);
-            PreviousYear = CurrentYear.Previous;
-            NextYear = CurrentYear.Next;
-
+            CurrentMonth = monthsList.Current(new DateValue(DateTime.Now.Month));
+            CurrentDay = daysList.Current(new DateValue(DateTime.Now.DayOfYear));
         }
 
-        private void FillYearList(DateTime date)
+        private void FillYearList(int year)
         {
             yearsList = new DoublyNodeLinkedList<int>();
-            for (int i = date.Year - 10; i < date.Year+10 ; i++)
+            for (int i = year - 10; i < year+10 ; i++)
             {
                 yearsList.Add(new DoublyNode<int>(i));
             }
         }
 
-        private void FillMonthsList()
+        private void FillMonthsList(int year)
         {
             monthsList = new DoublyNodeLinkedList<DateValue>();
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(1, "январь")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(2, "февраль")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(3, "март")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(4, "апрель")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(5, "май")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(6, "июнь")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(7, "июль")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(8, "август")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(9, "сентябрь")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(10, "октябрь")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(11, "ноябрь")));
-            monthsList.Add(new DoublyNode<DateValue>(new DateValue(12, "декабрь")));
+            
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(1, "январь", new DateTime(year, 1, 1, 0, 0, 0), new DateTime(year, 1, 31, 23, 59, 59))));
+            if (DateTime.IsLeapYear(year))
+                monthsList.Add(new DoublyNode<DateValue>(new DateValue(2, "февраль", new DateTime(year, 2, 1, 0, 0, 0), new DateTime(year, 2, 29, 23, 59, 59))));
+            else
+                monthsList.Add(new DoublyNode<DateValue>(new DateValue(2, "февраль", new DateTime(year, 2, 1, 0, 0, 0), new DateTime(year, 2, 28, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(3, "март", new DateTime(year, 3, 1, 0, 0, 0), new DateTime(year, 3, 31, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(4, "апрель", new DateTime(year, 4, 1, 0, 0, 0), new DateTime(year, 4, 30, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(5, "май", new DateTime(year, 5, 1, 0, 0, 0), new DateTime(year, 5, 31, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(6, "июнь", new DateTime(year, 6, 1, 0, 0, 0), new DateTime(year, 6, 30, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(7, "июль", new DateTime(year, 7, 1, 0, 0, 0), new DateTime(year, 7, 31, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(8, "август", new DateTime(year, 8, 1, 0, 0, 0), new DateTime(year, 8, 31, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(9, "сентябрь", new DateTime(year, 9, 1, 0, 0, 0), new DateTime(year, 9, 30, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(10, "октябрь", new DateTime(year, 10, 1, 0, 0, 0), new DateTime(year, 10, 31, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(11, "ноябрь", new DateTime(year, 11, 1, 0, 0, 0), new DateTime(year, 11, 30, 23, 59, 59))));
+            monthsList.Add(new DoublyNode<DateValue>(new DateValue(12, "декабрь", new DateTime(year, 12, 1, 0, 0, 0), new DateTime(year, 12, 31, 23, 59, 59))));
         }
 
-        private void FillWeeksList(DateTime date)
+        private void FillWeeksList(int year)
         {
+            weeksList = new DoublyNodeLinkedList<DateValue>();
+            DateTime weekStart = new DateTime(year, 1, 1, 0, 0, 0);
+            DateTime weekEnd = new DateTime(year, 1, 1, 23, 59, 59);
+            int weekNumber = 0;
 
-        }
-
-        private void FillDaysList(DateTime date)
-        {
-            daysList = new DoublyNodeLinkedList<int>();
-            int daysInYear = DateTime.IsLeapYear(date.Year) ? 366 : 365;
-            for (int i = 1; i < daysInYear; i++)
+            while(true)
             {
+                if (weekEnd.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    weekNumber++;
+                    DateValue dateValue = new DateValue(weekNumber, weekStart.ToString("d MMM") + " - " + weekEnd.ToString("d MMM"), weekStart, weekEnd);
+                    weeksList.Add(new DoublyNode<DateValue>(dateValue));
+                    weekStart = weekEnd.AddSeconds(1);
+                    weekEnd = weekEnd.AddDays(7);
+                }
+                else
+                {
+                    weekEnd = weekEnd.AddDays(1);
+                }
 
+                if (weekEnd.Year > year)
+                {
+                    if (weekStart.Year > year) break;
+               
+                    do
+                    {
+                        weekEnd = weekEnd.AddDays(-1);
+                    }
+                    while (weekEnd.Date != new DateTime(year, 12, 31));
+                    weekNumber++;
+                    DateValue dateValue = new DateValue(weekNumber, weekStart.ToString("d MMM") + " - " + weekEnd.ToString("d MMM"), weekStart, weekEnd);
+                    weeksList.Add(new DoublyNode<DateValue>(dateValue));
+                    break;
+                }
+            }
+        }
+
+        private void FillDaysList(int year)
+        {
+            daysList = new DoublyNodeLinkedList<DateValue>();
+            int daysInYear = DateTime.IsLeapYear(year) ? 366 : 365;
+            DateTime dateStart = new DateTime(year, 1, 1, 0, 0, 0);
+            for (int i = 0; i < daysInYear; i++)
+            {
+                DateValue dateValue = new DateValue(i+1, dateStart.AddDays(i).ToString("ddd, d MMM."));
+                daysList.Add(new DoublyNode<DateValue>(dateValue));
             }
         }
 

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Planner.Model;
+using Planner.Model.Target;
 
 namespace Planner.ViewModel
 {
@@ -309,11 +310,23 @@ namespace Planner.ViewModel
 
         private MenuItem currentMenuItem;
 
+        private TargetList targetList;
+        public TargetList TargetList
+        {
+            get { return targetList; }
+            set
+            {
+                targetList = value;
+                OnPropertyChanged("TargetList");
+            }
+        }
+
         public MainViewModel()
         {
             currentMenuItem = MenuItem.Year;
             FillYearList(DateTime.Now.Year);
             CurrentYear = yearsList.Current(DateTime.Now.Year);
+            TargetList = new TargetList();
         }
 
         private void FillYearList(int year)
@@ -418,7 +431,7 @@ namespace Planner.ViewModel
                     TitleText = "Просроченные цели";
                     break;
                 case MenuItem.Done:
-                    TitleText = "Заверешенные цели";
+                    TitleText = "Завершенные цели";
                     break;
             }
         }

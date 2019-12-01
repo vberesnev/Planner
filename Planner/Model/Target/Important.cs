@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Planner.Model
+namespace Planner.Model.Target
 {
     public enum Important
     {

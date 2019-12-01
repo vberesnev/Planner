@@ -273,7 +273,11 @@
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">
-
+            <ListBox ItemsSource="{Binding TargetList.Items}">
+                
+            </ListBox>
+            
+            
             <Button x:Name="PlusButton" 
                 Panel.ZIndex="100"
                 HorizontalAlignment="Right"

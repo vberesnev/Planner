@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -57,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\DateValue.cs" />
+    <Compile Include="Model\Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="View\SettingsWindow.xaml.cs">
@@ -137,6 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\white_plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\double_arrow_left.png" />
+    <Resource Include="Resources\double_arrow_right.png" />
+    <Resource Include="Resources\one_arrow_left.png" />
+    <Resource Include="Resources\one_arrow_right.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

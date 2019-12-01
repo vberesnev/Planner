@@ -51,9 +51,27 @@ namespace Planner.Model
             return current;
         }
 
+        public DoublyNode<T> MoveNext(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                current = current.Next;
+            }
+            return current;
+        }
+
         public DoublyNode<T> MovePrevious()
         {
             current = current.Previous;
+            return current;
+        }
+
+        public DoublyNode<T> MovePrevious(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                current = current.Previous;
+            }
             return current;
         }
 

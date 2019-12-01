@@ -19,8 +19,8 @@
         </Style>
 
         <Style  x:Key="ArrowsButtonsImageStyle" TargetType="Image">
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Width" Value="25" />
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
@@ -151,23 +151,39 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="NotSelectedCaruselMiniTextBlockValue" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2 0"/>
+            <Setter Property="FontSize" Value="8"/>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+            <Setter Property="Foreground" Value="SlateGray"/>
+            <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+            <Setter Property="LineHeight" Value="9" />
+        </Style>
+
         <Style x:Key="NotSelectedCaruselTextBlockValue" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="5 0"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2 0"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Foreground" Value="Gray"/>
-            <Setter Property="Width" Value="30"/>
+            <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+            <Setter Property="LineHeight" Value="11" />
         </Style>
 
         <Style x:Key="SelectedCaruselTextBlockValue" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#25B7D3"/>
             <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Padding" Value="0 2"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+            <Setter Property="LineHeight" Value="13" />
+            <Setter Property="Padding" Value="1 2"/>
         </Style>
 
     </Application.Resources>

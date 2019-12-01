@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -104,6 +105,19 @@ namespace Planner.ViewModel
             }
         }
 
+        private RelayCommand previousAnyWeekommand;
+        public RelayCommand PreviousAnyWeekommand
+        {
+            get
+            {
+                return previousAnyWeekommand ??
+                  (previousAnyWeekommand = new RelayCommand(obj =>
+                  {
+                      CurrentWeek = weeksList.MovePrevious();
+                  }));
+            }
+        }
+
         private RelayCommand nextWeekCommand;
         public RelayCommand NextWeekCommand
         {
@@ -113,6 +127,19 @@ namespace Planner.ViewModel
                   (nextWeekCommand = new RelayCommand(obj =>
                   {
                       CurrentWeek = weeksList.MoveNext();
+                  }));
+            }
+        }
+
+        private RelayCommand nextAnyWeeksCommand;
+        public RelayCommand NextAnyWeeksCommand
+        {
+            get
+            {
+                return nextAnyWeeksCommand ??
+                  (nextAnyWeeksCommand = new RelayCommand(obj =>
+                  {
+                      CurrentWeek = weeksList.MoveNext(Settings.GetSettings().DayLongMoveParametr);
                   }));
             }
         }
@@ -143,6 +170,19 @@ namespace Planner.ViewModel
             }
         }
 
+        private RelayCommand previousAnyDaysCommand;
+        public RelayCommand PreviousAnyDaysCommand
+        {
+            get
+            {
+                return previousAnyDaysCommand ??
+                  (previousAnyDaysCommand = new RelayCommand(obj =>
+                  {
+                      CurrentDay = daysList.MovePrevious(Settings.GetSettings().DayLongMoveParametr);
+                  }));
+            }
+        }
+
         private RelayCommand nextDayCommand;
         public RelayCommand NextDayCommand
         {
@@ -152,6 +192,19 @@ namespace Planner.ViewModel
                   (nextDayCommand = new RelayCommand(obj =>
                   {
                       CurrentDay = daysList.MoveNext();
+                  }));
+            }
+        }
+
+        private RelayCommand nextAnyDaysCommand;
+        public RelayCommand NextAnyDaysCommand
+        {
+            get
+            {
+                return nextAnyDaysCommand ??
+                  (nextAnyDaysCommand = new RelayCommand(obj =>
+                  {
+                      CurrentDay = daysList.MoveNext(Settings.GetSettings().DayLongMoveParametr);
                   }));
             }
         }
@@ -182,6 +235,7 @@ namespace Planner.ViewModel
 
             CurrentYear = yearsList.Current(DateTime.Now.Year);
             CurrentMonth = monthsList.Current(new DateValue(DateTime.Now.Month));
+            CurrentWeek = weeksList.Current(NumberOfWeek(DateTime.Now));
             CurrentDay = daysList.Current(new DateValue(DateTime.Now.DayOfYear));
         }
 
@@ -203,6 +257,7 @@ namespace Planner.ViewModel
                 monthsList.Add(new DoublyNode<DateValue>(new DateValue(2, "февраль", new DateTime(year, 2, 1, 0, 0, 0), new DateTime(year, 2, 29, 23, 59, 59))));
             else
                 monthsList.Add(new DoublyNode<DateValue>(new DateValue(2, "февраль", new DateTime(year, 2, 1, 0, 0, 0), new DateTime(year, 2, 28, 23, 59, 59))));
+
             monthsList.Add(new DoublyNode<DateValue>(new DateValue(3, "март", new DateTime(year, 3, 1, 0, 0, 0), new DateTime(year, 3, 31, 23, 59, 59))));
             monthsList.Add(new DoublyNode<DateValue>(new DateValue(4, "апрель", new DateTime(year, 4, 1, 0, 0, 0), new DateTime(year, 4, 30, 23, 59, 59))));
             monthsList.Add(new DoublyNode<DateValue>(new DateValue(5, "май", new DateTime(year, 5, 1, 0, 0, 0), new DateTime(year, 5, 31, 23, 59, 59))));
@@ -261,27 +316,17 @@ namespace Planner.ViewModel
             DateTime dateStart = new DateTime(year, 1, 1, 0, 0, 0);
             for (int i = 0; i < daysInYear; i++)
             {
-                DateValue dateValue = new DateValue(i+1, dateStart.AddDays(i).ToString("ddd, d MMM."));
+                DateValue dateValue = new DateValue(i+1, dateStart.AddDays(i).ToString("ddd, d MMM"));
                 daysList.Add(new DoublyNode<DateValue>(dateValue));
             }
         }
 
-        private Dictionary<int, string> monthsDictionary = new Dictionary<int, string>
+        private DateValue NumberOfWeek(DateTime date)
         {
-            {1, "январь"},
-            {2, "февраль"},
-            {3, "март"},
-            {4, "апрель"},
-            {5, "май"},
-            {6, "июнь"},
-            {7, "июль"},
-            {8, "август"},
-            {9, "сентябрь"},
-            {10, "октябрь"},
-            {11, "ноябрь"},
-            {12, "декабрь"}
-        };
-
+            var calendar = new GregorianCalendar();
+            return new DateValue(calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday));
+        }
+               
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName]string prop = "")

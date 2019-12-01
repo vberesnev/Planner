@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Planner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="700" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <DockPanel LastChildFill="True" Background="Snow">
         <DockPanel DockPanel.Dock="Top"
                    LastChildFill="True"
@@ -15,7 +15,7 @@
             <TextBlock DockPanel.Dock="Left"
                         x:Name="Logo"
                         Text="p l a n n e r"
-                        Margin="10 0"
+                        Margin="20 0"
                         FontSize="24"
                         FontWeight="Bold"
                         FontFamily="Luminari"
@@ -69,12 +69,24 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
-            <Button Uid="0" Grid.Column="0" Style="{StaticResource MenuButtonsStyle}" Content="ГОД" Click="MenuButton_Click"/>
-            <Button Uid="1" Grid.Column="1" Style="{StaticResource MenuButtonsStyle}" Content="МЕСЯЦ" Click="MenuButton_Click"/>
-            <Button Uid="2" Grid.Column="2" Style="{StaticResource MenuButtonsStyle}" Content="НЕДЕЛЯ" Click="MenuButton_Click"/>
-            <Button Uid="3" Grid.Column="3" Style="{StaticResource MenuButtonsStyle}" Content="ДЕНЬ" Click="MenuButton_Click"/>
-            <Button Uid="4" Grid.Column="4" Style="{StaticResource MenuButtonRedStyle}" Content="ПРОСРОЧЕННЫЕ" Click="MenuButton_Click"/>
-            <Button Uid="5" Grid.Column="5" Style="{StaticResource MenuButtonGreenStyle}" Content="ЗАВЕРШЕННЫЕ" Click="MenuButton_Click"/>
+            <Button Uid="0" Grid.Column="0" Style="{StaticResource MenuButtonsStyle}" Content="ГОД" Click="MenuButton_Click"
+                    Command="{Binding SetMenuItemCommand}"
+                    CommandParameter="0"/>
+            <Button Uid="1" Grid.Column="1" Style="{StaticResource MenuButtonsStyle}" Content="МЕСЯЦ" Click="MenuButton_Click"
+                    Command="{Binding SetMenuItemCommand}"
+                    CommandParameter="1"/>
+            <Button Uid="2" Grid.Column="2" Style="{StaticResource MenuButtonsStyle}" Content="НЕДЕЛЯ" Click="MenuButton_Click"
+                    Command="{Binding SetMenuItemCommand}"
+                    CommandParameter="2"/>
+            <Button Uid="3" Grid.Column="3" Style="{StaticResource MenuButtonsStyle}" Content="ДЕНЬ" Click="MenuButton_Click"
+                    Command="{Binding SetMenuItemCommand}"
+                    CommandParameter="3"/>
+            <Button Uid="4" Grid.Column="4" Style="{StaticResource MenuButtonRedStyle}" Content="ПРОСРОЧЕННЫЕ" Click="MenuButton_Click"
+                    Command="{Binding SetMenuItemCommand}"
+                    CommandParameter="4"/>
+            <Button Uid="5" Grid.Column="5" Style="{StaticResource MenuButtonGreenStyle}" Content="ЗАВЕРШЕННЫЕ" Click="MenuButton_Click"
+                    Command="{Binding SetMenuItemCommand}"
+                    CommandParameter="5"/>
             <Grid x:Name="MenuCell0" Grid.Column="0" Grid.Row="1"/>
             <Grid x:Name="MenuCell1" Grid.Column="1" Grid.Row="1"/>
             <Grid x:Name="MenuCell2" Grid.Column="2" Grid.Row="1"/>
@@ -82,7 +94,7 @@
             <Grid x:Name="MenuCell4" Grid.Column="4" Grid.Row="1"/>
             <Grid x:Name="MenuCell5" Grid.Column="5" Grid.Row="1"/>
         </Grid>
-        <Grid DockPanel.Dock="Top">
+        <Grid DockPanel.Dock="Top" x:Name="FilterGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition  Width="3*"/>
@@ -91,8 +103,7 @@
               x:Name="YearFilterPanel"
               Orientation="Horizontal"
               Height="40"
-              Margin="10 5">
-                
+              Margin="20 5">
                 <Button  Style="{StaticResource ControlButtonsStyle}"
                      Command="{Binding PreviousYearCommand}">
                     <Image Source="/Resources/one_arrow_left.png"
@@ -151,7 +162,7 @@
               Orientation="Horizontal"
               Height="40"
               Margin="10 5"
-              Visibility="Visible">
+              Visibility="Hidden">
                 <Button  Style="{StaticResource ControlButtonsStyle}"
                          Margin="0 0 7 0"
                      Command="{Binding PreviousAnyWeeksCommand}">
@@ -235,7 +246,7 @@
                         Style="{StaticResource NotSelectedCaruselMiniTextBlockValue}"
                        Text="{Binding CurrentDay.Next.Next.Data.Value}"/>
                 </Grid>
-                
+
                 <Button  Style="{StaticResource ControlButtonsStyle}"
                      Command="{Binding NextDayCommand}">
                     <Image Source="/Resources/one_arrow_right.png"
@@ -248,43 +259,12 @@
                        Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
             </StackPanel>
-            
-            
-            
-            
-            
-            <Grid Grid.Column="1" Width="200" Visibility="Hidden">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" 
-                        Style="{StaticResource NotSelectedCaruselMiniTextBlockValue}"
-                        HorizontalAlignment="Left"
-                        Text="{Binding CurrentDay.Previous.Previous.Data.Value}"/>
-                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0"
-                        Style="{StaticResource NotSelectedCaruselMiniTextBlockValue}"
-                        HorizontalAlignment="Right"
-                        Text="{Binding CurrentDay.Next.Next.Data.Value}"/>
-                <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"  
-                        Style="{StaticResource NotSelectedCaruselTextBlockValue}" 
-                       Text="{Binding CurrentDay.Previous.Data.Value}"/>
-                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1"
-                        Style="{StaticResource NotSelectedCaruselTextBlockValue}"
-                        Text="{Binding CurrentDay.Next.Data.Value}"/>
-                <TextBlock  Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"
-                            Style="{StaticResource SelectedCaruselTextBlockValue}" 
-                            Text="{Binding CurrentDay.Data.Value}"/>
-            </Grid>
-
         </Grid>
+
+        <StackPanel DockPanel.Dock="Top" x:Name="TitlePanel">
+            <TextBlock Text="{Binding TitleText}"
+                       Style="{StaticResource TitleTextBlock}"/>
+        </StackPanel>
         
         <DockPanel DockPanel.Dock="Bottom"
                    x:Name="Footer"

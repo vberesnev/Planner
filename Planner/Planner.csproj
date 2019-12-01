@@ -60,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\DateValue.cs" />
+    <Compile Include="Model\MenuItem.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />

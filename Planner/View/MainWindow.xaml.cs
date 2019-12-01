@@ -38,6 +38,8 @@ namespace Planner
                     this.Show();
                     this.WindowState = WindowState.Normal;
                 };
+
+            this.MenuCell0.Background = Brushes.CornflowerBlue;
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -86,26 +88,44 @@ namespace Planner
                 case 0:
                     this.MenuCell0.Background = Brushes.CornflowerBlue;
                     this.PlusButton.Visibility = Visibility.Visible;
+                    this.FilterGrid.Visibility = Visibility.Visible;
+                    this.MonthFilterPanel.Visibility = Visibility.Hidden;
+                    this.WeekFilterPanel.Visibility = Visibility.Hidden;
+                    this.DayFilterPanel.Visibility = Visibility.Hidden;
                     break;
                 case 1:
                     this.MenuCell1.Background = Brushes.CornflowerBlue;
                     this.PlusButton.Visibility = Visibility.Visible;
+                    this.FilterGrid.Visibility = Visibility.Visible;
+                    this.MonthFilterPanel.Visibility = Visibility.Visible;
+                    this.WeekFilterPanel.Visibility = Visibility.Hidden;
+                    this.DayFilterPanel.Visibility = Visibility.Hidden;
                     break;
                 case 2:
                     this.MenuCell2.Background = Brushes.CornflowerBlue;
                     this.PlusButton.Visibility = Visibility.Visible;
+                    this.FilterGrid.Visibility = Visibility.Visible;
+                    this.MonthFilterPanel.Visibility = Visibility.Hidden;
+                    this.WeekFilterPanel.Visibility = Visibility.Visible;
+                    this.DayFilterPanel.Visibility = Visibility.Hidden;
                     break;
                 case 3:
                     this.MenuCell3.Background = Brushes.CornflowerBlue;
                     this.PlusButton.Visibility = Visibility.Visible;
+                    this.FilterGrid.Visibility = Visibility.Visible;
+                    this.MonthFilterPanel.Visibility = Visibility.Hidden;
+                    this.WeekFilterPanel.Visibility = Visibility.Hidden;
+                    this.DayFilterPanel.Visibility = Visibility.Visible;
                     break;
                 case 4:
                     this.MenuCell4.Background = Brushes.IndianRed;
                     this.PlusButton.Visibility = Visibility.Hidden;
+                    this.FilterGrid.Visibility = Visibility.Collapsed;
                     break;
                 case 5:
                     this.MenuCell5.Background = Brushes.ForestGreen;
                     this.PlusButton.Visibility = Visibility.Hidden;
+                    this.FilterGrid.Visibility = Visibility.Collapsed;
                     break;
             }
         }

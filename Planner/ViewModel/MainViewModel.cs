@@ -47,6 +47,33 @@ namespace Planner.ViewModel
             set
             {
                 currentYear = value;
+
+                FillMonthsList(currentYear.Data);
+                FillWeeksList(currentYear.Data);
+                FillDaysList(currentYear.Data);
+
+                if (CurrentMonth != null)
+                    CurrentMonth = monthsList.Current(CurrentMonth.Data);
+                else
+                    CurrentMonth = monthsList.Current(new DateValue(DateTime.Now.Month));
+
+                if (CurrentWeek != null)
+                {
+                    if (CurrentWeek.Data.Key <= NumberOfLastWeekInYear(CurrentYear.Data))
+                        CurrentWeek = weeksList.Current(CurrentWeek.Data);
+                    else
+                        CurrentWeek = weeksList.Current(new DateValue(NumberOfLastWeekInYear(CurrentYear.Data)));
+                }
+                else
+                    CurrentWeek = weeksList.Current(NumberOfWeek(DateTime.Now));
+
+                if (CurrentDay != null)
+                    CurrentDay = daysList.Current(CurrentDay.Data);
+                else
+                    CurrentDay = daysList.Current(new DateValue(DateTime.Now.DayOfYear));
+
+                SetTitle();
+
                 OnPropertyChanged("CurrentYear");
             }
         }
@@ -86,6 +113,7 @@ namespace Planner.ViewModel
             set
             {
                 currentMonth = value;
+                SetTitle();
                 OnPropertyChanged("CurrentMonth");
             }
         }
@@ -105,15 +133,15 @@ namespace Planner.ViewModel
             }
         }
 
-        private RelayCommand previousAnyWeekommand;
-        public RelayCommand PreviousAnyWeekommand
+        private RelayCommand previousAnyWeeksCommand;
+        public RelayCommand PreviousAnyWeeksCommand
         {
             get
             {
-                return previousAnyWeekommand ??
-                  (previousAnyWeekommand = new RelayCommand(obj =>
+                return previousAnyWeeksCommand ??
+                  (previousAnyWeeksCommand = new RelayCommand(obj =>
                   {
-                      CurrentWeek = weeksList.MovePrevious();
+                      CurrentWeek = weeksList.MovePrevious(Settings.GetSettings().WeekLongMoveParametr);
                   }));
             }
         }
@@ -139,7 +167,7 @@ namespace Planner.ViewModel
                 return nextAnyWeeksCommand ??
                   (nextAnyWeeksCommand = new RelayCommand(obj =>
                   {
-                      CurrentWeek = weeksList.MoveNext(Settings.GetSettings().DayLongMoveParametr);
+                      CurrentWeek = weeksList.MoveNext(Settings.GetSettings().WeekLongMoveParametr);
                   }));
             }
         }
@@ -151,6 +179,7 @@ namespace Planner.ViewModel
             set
             {
                 currentWeek = value;
+                SetTitle();
                 OnPropertyChanged("CurrentWeek");
             }
         }
@@ -216,27 +245,75 @@ namespace Planner.ViewModel
             set
             {
                 currentDay = value;
+                SetTitle();
                 OnPropertyChanged("CurrentDay");
             }
         }
         #endregion
+
+        private RelayCommand setMenuItemCommand;
+        public RelayCommand SetMenuItemCommand
+        {
+            get
+            {
+                return setMenuItemCommand ??
+                  (setMenuItemCommand = new RelayCommand(obj =>
+                  {
+                      int parametr;
+                      if (Int32.TryParse(obj.ToString(), out parametr))
+                      {
+                          switch (parametr)
+                          {
+                              case 0:
+                                  currentMenuItem = MenuItem.Year;
+                                  break;
+                              case 1:
+                                  currentMenuItem = MenuItem.Month;
+                                  break;
+                              case 2:
+                                  currentMenuItem = MenuItem.Week;
+                                  break;
+                              case 3:
+                                  currentMenuItem = MenuItem.Day;
+                                  break;
+                              case 4:
+                                  currentMenuItem = MenuItem.Overdue;
+                                  break;
+                              case 5:
+                                  currentMenuItem = MenuItem.Done;
+                                  break;
+                          }
+                          SetTitle();
+                      }
+                  }));
+            }
+        }
+
+
+
+        private string titleText;
+        public string TitleText
+        {
+            get { return titleText; }
+            set
+            {
+                titleText = value;
+                OnPropertyChanged("TitleText");
+            }
+        }
 
         private DoublyNodeLinkedList<int> yearsList;
         private DoublyNodeLinkedList<DateValue> monthsList;
         private DoublyNodeLinkedList<DateValue> weeksList;
         private DoublyNodeLinkedList<DateValue> daysList;
 
+        private MenuItem currentMenuItem;
+
         public MainViewModel()
         {
+            currentMenuItem = MenuItem.Year;
             FillYearList(DateTime.Now.Year);
-            FillMonthsList(DateTime.Now.Year);
-            FillWeeksList(DateTime.Now.Year);
-            FillDaysList(DateTime.Now.Year);
-
             CurrentYear = yearsList.Current(DateTime.Now.Year);
-            CurrentMonth = monthsList.Current(new DateValue(DateTime.Now.Month));
-            CurrentWeek = weeksList.Current(NumberOfWeek(DateTime.Now));
-            CurrentDay = daysList.Current(new DateValue(DateTime.Now.DayOfYear));
         }
 
         private void FillYearList(int year)
@@ -316,8 +393,33 @@ namespace Planner.ViewModel
             DateTime dateStart = new DateTime(year, 1, 1, 0, 0, 0);
             for (int i = 0; i < daysInYear; i++)
             {
-                DateValue dateValue = new DateValue(i+1, dateStart.AddDays(i).ToString("ddd, d MMM"));
+                DateValue dateValue = new DateValue(i+1, dateStart.AddDays(i).ToString("ddd, d MMM"), dateStart.AddDays(i), dateStart.AddDays(i).AddHours(23).AddMinutes(59).AddSeconds(59));
                 daysList.Add(new DoublyNode<DateValue>(dateValue));
+            }
+        }
+
+        private void SetTitle()
+        {
+            switch (currentMenuItem)
+            {
+                case MenuItem.Year:
+                    TitleText = $"Цели на {CurrentYear.Data} год";
+                    break;
+                case MenuItem.Month:
+                    TitleText = $"Цели на {CurrentMonth.Data.Value.ToLower()} {CurrentYear.Data} года";
+                    break;
+                case MenuItem.Week:
+                    TitleText = $"Цели на {CurrentWeek.Data.Key} неделю {CurrentYear.Data} года ({CurrentWeek.Data.Value})";
+                    break;
+                case MenuItem.Day:
+                    TitleText = "Цели на " + CurrentDay.Data.Start.ToString("ddd, d MMMM yyyy") +" года";
+                    break;
+                case MenuItem.Overdue:
+                    TitleText = "Просроченные цели";
+                    break;
+                case MenuItem.Done:
+                    TitleText = "Заверешенные цели";
+                    break;
             }
         }
 
@@ -325,6 +427,13 @@ namespace Planner.ViewModel
         {
             var calendar = new GregorianCalendar();
             return new DateValue(calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday));
+        }
+
+        private int NumberOfLastWeekInYear(int year)
+        {
+            DateTime lastDay = new DateTime(year, 12, 31);
+            var calendar = new GregorianCalendar();
+            return calendar.GetWeekOfYear(lastDay, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
         }
                
         public event PropertyChangedEventHandler PropertyChanged;
@@ -334,7 +443,5 @@ namespace Planner.ViewModel
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
-
-
     }
 }

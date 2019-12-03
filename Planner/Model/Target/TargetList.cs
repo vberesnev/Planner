@@ -5,12 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Planner.Model.Target
 {
-    public class TargetList
+    public class TargetList: INotifyPropertyChanged
     {
-        public IEnumerable<Target> Items { get; set; }
+        private ObservableCollection<Target> items;
+        public ObservableCollection<Target> Items
+        {
+            get { return items; }
+            set
+            {
+                items = value;
+                OnPropertyChanged("Items");
+            }
+        }
 
         public int Count => Items.Count();
         public int DoneCount => Items.Where(x => x.Done = true).Count();
@@ -18,18 +29,39 @@ namespace Planner.Model.Target
 
         private PlannerContext db;
 
+        
+
         public TargetList()
         {
             db = new PlannerContext();
-            Items = db.Targets.Include(t => t.Tasks).Include(u => u.Owner).ToList();
         } 
 
-        public void Load() { }
+        public void Load()
+        {
+            Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks).Include(u => u.Owner).ToList());
+        }
 
-        public void Add(Target item) { }
+        public void Add(Target item)
+        {
+            Items.Add(item);
+            db.Targets.Add(item);
+            Save();
+        }
 
         public void Remove(Target item) { }
 
-        private void Save() { }
+        private void Save()
+        {
+            db.SaveChanges();
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
     }
 }

@@ -15,5 +15,15 @@ namespace Planner.Model.Target
 
         public Target Target { get; set; }
         public int? TargetId { get; set; }
+
+        public TargetTask() { }
+
+        public TargetTask(string name, string desc, Target target)
+        {
+            Name = name;
+            Description = desc;
+            Done = false;
+            Target = target;
+        }
     }
 }

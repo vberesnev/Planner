@@ -290,6 +290,27 @@ namespace Planner.ViewModel
             }
         }
 
+        private RelayCommand addTargetCommand;
+        public RelayCommand AddTargetCommand
+        {
+            get
+            {
+                return addTargetCommand ??
+                  (addTargetCommand = new RelayCommand(obj =>
+                  {
+                      Target target = new Target("Новая цель", "Описание", TargetType.Year, 2019, 2019, new DateTime(2019, 12, 31), Important.None, null);
+
+                      TargetTask task1 = new TargetTask("Задача для новой цели", "ее описание", target);
+                      TargetTask task2 = new TargetTask("Задача 2 для новой цели", "ее описание", target);
+                      target.Tasks.Add(task1);
+                      target.Tasks.Add(task2);
+
+                      TargetList.Add(target);
+
+                  }));
+            }
+        }
+
 
 
         private string titleText;
@@ -327,6 +348,7 @@ namespace Planner.ViewModel
             FillYearList(DateTime.Now.Year);
             CurrentYear = yearsList.Current(DateTime.Now.Year);
             TargetList = new TargetList();
+            TargetList.Load();
         }
 
         private void FillYearList(int year)

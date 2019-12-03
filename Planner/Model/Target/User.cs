@@ -13,6 +13,13 @@ namespace Planner.Model.Target
 
         public ICollection<Target> Targets { get; set; }
 
+        public User() { }
+
+        public User(string name)
+        {
+            Name = name;
+        }
+
         public override string ToString()
         {
             return Name;

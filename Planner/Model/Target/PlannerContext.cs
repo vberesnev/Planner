@@ -9,7 +9,7 @@ namespace Planner.Model.Target
 {
     class PlannerContext: DbContext
     {
-        public PlannerContext() : base("DefaultConnection") { }
+        public PlannerContext() : base("PlannerDbConnection") { }
 
         public DbSet<Target> Targets { get; set; }
         public DbSet<TargetTask> TargetTasks { get; set; }

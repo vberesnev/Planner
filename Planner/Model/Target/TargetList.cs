@@ -29,8 +29,6 @@ namespace Planner.Model.Target
 
         private PlannerContext db;
 
-        
-
         public TargetList()
         {
             db = new PlannerContext();

@@ -290,6 +290,91 @@ namespace Planner.ViewModel
             }
         }
 
+        private RelayCommand setSelectedTargetImportantValue;
+        public RelayCommand SetSelectedTargetImportantValue
+        {
+            get
+            {
+                return setSelectedTargetImportantValue ??
+                  (setSelectedTargetImportantValue = new RelayCommand(obj =>
+                  {
+                      int parametr;
+                      if (Int32.TryParse(obj.ToString(), out parametr))
+                      {
+                          if (parametr == (int)SelectedTarget.Important)
+                          {
+                              SelectedTarget.Important = 0;
+                              parametr = 0;
+                          }
+                          else
+                              SelectedTarget.Important = (Important)parametr;
+
+                          SetExclamationPointButton(parametr);
+                      }
+                  }));
+            }
+        }
+
+        private void SetExclamationPointButton(int parametr)
+        {
+            LowImportantButtonColor = "Gray";
+            MiddleImportantButtonColor = "Gray";
+            HighImportantButtonColor = "Gray";
+
+            switch (parametr)
+            {
+                case 0:
+                    break;
+                case 1:
+                    LowImportantButtonColor = "LightCoral";
+                    break;
+                case 2:
+                    LowImportantButtonColor = "LightCoral";
+                    MiddleImportantButtonColor = "LightCoral";
+                    break;
+                case 3:
+                    LowImportantButtonColor = "LightCoral";
+                    MiddleImportantButtonColor = "LightCoral";
+                    HighImportantButtonColor = "LightCoral";
+                    break;
+            }
+        }
+
+        private string lowImportantButtonColor;
+        public string LowImportantButtonColor
+        {
+            get { return lowImportantButtonColor; }
+            set { lowImportantButtonColor = value; OnPropertyChanged("LowImportantButtonColor"); }
+        }
+
+        private string middleImportantButtonColor;
+        public string MiddleImportantButtonColor
+        {
+            get { return middleImportantButtonColor; }
+            set { middleImportantButtonColor = value; OnPropertyChanged("MiddleImportantButtonColor"); }
+        }
+
+        private string highImportantButtonColor;
+        public string HighImportantButtonColor
+        {
+            get { return highImportantButtonColor; }
+            set { highImportantButtonColor = value; OnPropertyChanged("HighImportantButtonColor"); }
+        }
+
+
+        private RelayCommand openNewTargetWindowCommand;
+        public RelayCommand OpenNewTargetWindowCommand
+        {
+            get
+            {
+                return openNewTargetWindowCommand ??
+                  (openNewTargetWindowCommand = new RelayCommand(obj =>
+                  {
+
+                  }));
+            }
+        }
+
         private RelayCommand addTargetCommand;
         public RelayCommand AddTargetCommand
         {
@@ -298,14 +383,41 @@ namespace Planner.ViewModel
                 return addTargetCommand ??
                   (addTargetCommand = new RelayCommand(obj =>
                   {
-                      Target target = new Target("Новая цель", "Описание", TargetType.Year, 2019, 2019, new DateTime(2019, 12, 31), Important.None, null);
+                      if (SelectedTarget.Id == 0)
+                      {
+                          int periodValue = 0;
+                          switch (SelectedTarget.TargetType)
+                          {
+                              case TargetType.Year:
+                                  periodValue = CurrentYear.Data;
+                                  break;
+                              case TargetType.Month:
+                                  periodValue = currentMonth.Data.Key;
+                                  break;
+                              case TargetType.Week:
+                                  periodValue = CurrentWeek.Data.Key;
+                                  break;
+                              case TargetType.Day:
+                                  periodValue = CurrentDay.Data.Key;
+                                  break;
+                          }
+                          Target newTarget = new Target(SelectedTarget.Name, 
+                                                        SelectedTarget.Description, 
+                                                        SelectedTarget.TargetType, 
+                                                        CurrentYear.Data, periodValue, 
+                                                        SelectedTarget.LastDate, 
+                                                        SelectedTarget.Important, null);
+                          TargetList.Add(newTarget);
+                      }
 
-                      TargetTask task1 = new TargetTask("Задача для новой цели", "ее описание", target);
-                      TargetTask task2 = new TargetTask("Задача 2 для новой цели", "ее описание", target);
-                      target.Tasks.Add(task1);
-                      target.Tasks.Add(task2);
+                      //Target target = new Target("Новая цель", "Описание", TargetType.Year, 2019, 2019, new DateTime(2019, 12, 31), Important.None, null);
 
-                      TargetList.Add(target);
+                      //TargetTask task1 = new TargetTask("Задача для новой цели", "ее описание", target);
+                      //TargetTask task2 = new TargetTask("Задача 2 для новой цели", "ее описание", target);
+                      //target.Tasks.Add(task1);
+                      //target.Tasks.Add(task2);
+
+                      //TargetList.Add(target);
 
                   }));
             }
@@ -342,6 +454,17 @@ namespace Planner.ViewModel
             }
         }
 
+        private Target selectedTarget;
+        public Target SelectedTarget
+        {
+            get { return selectedTarget; }
+            set
+            {
+                selectedTarget = value;
+                OnPropertyChanged("SelectedTarget");
+            }
+        }
+
         public MainViewModel()
         {
             currentMenuItem = MenuItem.Year;
@@ -349,6 +472,31 @@ namespace Planner.ViewModel
             CurrentYear = yearsList.Current(DateTime.Now.Year);
             TargetList = new TargetList();
             TargetList.Load();
+
+            LowImportantButtonColor = "Gray";
+            MiddleImportantButtonColor = "Gray";
+            HighImportantButtonColor = "Gray";
+        }
+
+        public void SetNewSelectedTarget()
+        {
+            switch (currentMenuItem)
+            {
+                case MenuItem.Year:
+                    SelectedTarget = new Target(TargetType.Year);
+                    break;
+                case MenuItem.Month:
+                    SelectedTarget = new Target(TargetType.Month);
+                    break;
+                case MenuItem.Week:
+                    SelectedTarget = new Target(TargetType.Week);
+                    break;
+                case MenuItem.Day:
+                    SelectedTarget = new Target(TargetType.Day);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void FillYearList(int year)
@@ -444,7 +592,7 @@ namespace Planner.ViewModel
                     TitleText = $"Цели на {CurrentMonth.Data.Value.ToLower()} {CurrentYear.Data} года";
                     break;
                 case MenuItem.Week:
-                    TitleText = $"Цели на {CurrentWeek.Data.Key} неделю {CurrentYear.Data} года ({CurrentWeek.Data.Value})";
+                    TitleText = $"Цели на {CurrentWeek.Data.Key}-ю неделю {CurrentYear.Data} года ({CurrentWeek.Data.Value})";
                     break;
                 case MenuItem.Day:
                     TitleText = "Цели на " + CurrentDay.Data.Start.ToString("ddd, d MMMM yyyy") +" года";

@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Planner.ViewModel;
-
+using System.Threading;
 
 namespace Planner
 {
@@ -23,6 +23,8 @@ namespace Planner
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int menuClickedIndex;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -74,7 +76,7 @@ namespace Planner
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            int index = int.Parse(((Button)e.Source).Uid);
+            menuClickedIndex = int.Parse(((Button)e.Source).Uid);
 
             this.MenuCell0.Background = null;
             this.MenuCell1.Background = null;
@@ -83,7 +85,7 @@ namespace Planner
             this.MenuCell4.Background = null;
             this.MenuCell5.Background = null;
 
-            switch (index)
+            switch (menuClickedIndex)
             {
                 case 0:
                     this.MenuCell0.Background = Brushes.CornflowerBlue;
@@ -128,6 +130,25 @@ namespace Planner
                     this.FilterGrid.Visibility = Visibility.Collapsed;
                     break;
             }
+        }
+
+        private void PlusButton_click(object sender, RoutedEventArgs e)
+        {
+            //создаю новый объект цели для добавления
+            ((MainViewModel)this.DataContext).SetNewSelectedTarget();
+            ShowTargetWindow();
+        }
+
+        private void ShowTargetWindow()
+        {
+            TargetWindow TW = new TargetWindow();
+            TW.Owner = this;
+            TW.YearFilterPanel.Visibility = this.YearFilterPanel.Visibility;
+            TW.MonthFilterPanel.Visibility = this.MonthFilterPanel.Visibility;
+            TW.WeekFilterPanel.Visibility = this.WeekFilterPanel.Visibility;
+            TW.DayFilterPanel.Visibility = this.DayFilterPanel.Visibility;
+            TW.DataContext = this.DataContext;
+            TW.ShowDialog();
         }
     }
 }

@@ -31,12 +31,19 @@ namespace Planner.Model.Target
         public ICollection<TargetTask> Tasks { get; set; }
 
 
-        public DateTime PeriodStart  => DateOperations.PeriodStart(TargetType,  Year, PeriodValue);
+        public DateTime PeriodStart => DateOperations.PeriodStart(TargetType, Year, PeriodValue);
         public DateTime PeriodFinish => DateOperations.PeriodFinish(TargetType, Year, PeriodValue);
+
 
         public Target() { }
 
-        public Target(string name, string desc, TargetType targetType, int year, int periodValue, DateTime lastDate, Important important, User owner)
+        public Target(TargetType targetType)
+        {
+            TargetType = targetType;
+            Tasks = new List<TargetTask>();
+        }
+
+        public Target(string name, string desc, TargetType targetType, int year, int periodValue, DateTime? lastDate, Important important, User owner)
         {
             Name = name;
             Description = desc;

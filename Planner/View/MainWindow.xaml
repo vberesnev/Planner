@@ -273,8 +273,28 @@
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">
-            <ListBox ItemsSource="{Binding TargetList.Items}">
-                
+            <ListBox ItemsSource="{Binding TargetList.Items}"
+                     SelectedItem="{Binding SelectedTarget, Mode=TwoWay}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Red">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="9*"/>
+                                    <ColumnDefinition Width="1*" MinWidth="30"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding Path=Name}"/>
+                                <Button x:Name="DeleteTarget_Button"/>
+                                <Button x:
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
             
             
@@ -284,7 +304,8 @@
                 VerticalAlignment="Bottom"
                 ToolTip="Создать задачу"
             Style="{StaticResource RoundedButtonStyle}"
-            Command="{Binding AddTargetCommand}">
+            Click="PlusButton_click">
+                   
                 <Image Source="/Resources/white_plus.png"
                 Width="30" Height="30"
                 Margin="0"/>

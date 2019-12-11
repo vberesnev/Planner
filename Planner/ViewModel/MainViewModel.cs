@@ -252,6 +252,7 @@ namespace Planner.ViewModel
         }
         #endregion
 
+        #region Команда установки пункта меню
         private RelayCommand setMenuItemCommand;
         public RelayCommand SetMenuItemCommand
         {
@@ -289,6 +290,7 @@ namespace Planner.ViewModel
                   }));
             }
         }
+        #endregion
 
         private RelayCommand setSelectedTargetImportantValue;
         public RelayCommand SetSelectedTargetImportantValue
@@ -361,20 +363,6 @@ namespace Planner.ViewModel
             set { highImportantButtonColor = value; OnPropertyChanged("HighImportantButtonColor"); }
         }
 
-
-        private RelayCommand openNewTargetWindowCommand;
-        public RelayCommand OpenNewTargetWindowCommand
-        {
-            get
-            {
-                return openNewTargetWindowCommand ??
-                  (openNewTargetWindowCommand = new RelayCommand(obj =>
-                  {
-
-                  }));
-            }
-        }
-
         private RelayCommand addTargetCommand;
         public RelayCommand AddTargetCommand
         {
@@ -407,6 +395,7 @@ namespace Planner.ViewModel
                                                         CurrentYear.Data, periodValue, 
                                                         SelectedTarget.LastDate, 
                                                         SelectedTarget.Important, null);
+                          newTarget.Tasks = SelectedTarget.Tasks;
                           TargetList.Add(newTarget);
                       }
 
@@ -423,6 +412,58 @@ namespace Planner.ViewModel
             }
         }
 
+        private RelayCommand deleteTargetCommand;
+        public RelayCommand DeleteTargetCommand
+        {
+            get
+            {
+                return deleteTargetCommand ??
+                  (deleteTargetCommand = new RelayCommand(obj =>
+                  {
+                      Target deleteTarget = obj as Target;
+                      if (deleteTarget != null)
+                      {
+                          TargetList.Remove(deleteTarget);
+                      }
+                  }));
+            }
+        }
+
+
+        private RelayCommand addTargetTaskCommand;
+        public RelayCommand AddTargetTaskCommand
+        {
+            get
+            {
+                return addTargetTaskCommand ??
+                  (addTargetTaskCommand = new RelayCommand(obj =>
+                  {
+                      if (!string.IsNullOrWhiteSpace(SelectedTargetTask.Name))
+                      {
+                          SelectedTarget.AddTask(SelectedTargetTask);
+                          SelectedTargetTask = new TargetTask();
+                      }
+                        
+                  }));
+            }
+        }
+
+        private RelayCommand deleteTargetTaskCommand;
+        public RelayCommand DeleteTargetTaskCommand
+        {
+            get
+            {
+                return deleteTargetTaskCommand ??
+                  (deleteTargetTaskCommand = new RelayCommand(obj =>
+                  {
+                      TargetTask deleteTargetTask = obj as TargetTask;
+                      if (deleteTargetTask != null)
+                      {
+                          SelectedTarget.RemoveTask(deleteTargetTask);
+                      }
+                  }));
+            }
+        }
 
 
         private string titleText;
@@ -465,6 +506,17 @@ namespace Planner.ViewModel
             }
         }
 
+        private TargetTask selectedTargetTask;
+        public TargetTask SelectedTargetTask
+        {
+            get { return selectedTargetTask; }
+            set
+            {
+                selectedTargetTask = value;
+                OnPropertyChanged("SelectedTargetTask");
+            }
+        }
+
         public MainViewModel()
         {
             currentMenuItem = MenuItem.Year;
@@ -497,6 +549,9 @@ namespace Planner.ViewModel
                 default:
                     break;
             }
+            //SelectedTarget.AddTask(new TargetTask() { Name = "1", Description = "2" });
+            //SelectedTarget.AddTask(new TargetTask() { Name = "1", Description = "2" });
+            SelectedTargetTask = new TargetTask();
         }
 
         private void FillYearList(int year)

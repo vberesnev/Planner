@@ -46,7 +46,12 @@ namespace Planner.Model.Target
             Save();
         }
 
-        public void Remove(Target item) { }
+        public void Remove(Target item)
+        {
+            Items.Remove(item);
+            db.Targets.Remove(item);
+            Save();
+        }
 
         private void Save()
         {

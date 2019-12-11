@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Planner.Model.Target
 {
-    public class Target
+    public class Target : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        private string name;
+        public string Name
+        { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
         public string Description { get; set; }
         public TargetType TargetType { get; set; }
         //Год в котором поставлена цель
@@ -28,11 +34,14 @@ namespace Planner.Model.Target
         public bool ForAllUsers { get; set; }
         public bool Done { get; set; }
 
-        public ICollection<TargetTask> Tasks { get; set; }
+        private ObservableCollection<TargetTask> tasks;
+        public ObservableCollection<TargetTask> Tasks { get { return tasks; } set { tasks = value; OnPropertyChanged("Tasks"); } }
 
 
         public DateTime PeriodStart => DateOperations.PeriodStart(TargetType, Year, PeriodValue);
         public DateTime PeriodFinish => DateOperations.PeriodFinish(TargetType, Year, PeriodValue);
+
+        
 
 
         public Target() { }
@@ -40,7 +49,7 @@ namespace Planner.Model.Target
         public Target(TargetType targetType)
         {
             TargetType = targetType;
-            Tasks = new List<TargetTask>();
+            Tasks = new ObservableCollection<TargetTask>();
         }
 
         public Target(string name, string desc, TargetType targetType, int year, int periodValue, DateTime? lastDate, Important important, User owner)
@@ -50,7 +59,10 @@ namespace Planner.Model.Target
             TargetType = targetType;
             Year = year;
             PeriodValue = periodValue;
-            LastDate = lastDate;
+            if (lastDate == null)
+                LastDate = PeriodFinish;
+            else
+                LastDate = lastDate;
             ProlongationDate = null;
             Important = important;
             if (owner == null)
@@ -64,9 +76,18 @@ namespace Planner.Model.Target
                 ForAllUsers = false;
             }
             Done = false;
-            Tasks = new List<TargetTask>();
+            Tasks = new ObservableCollection<TargetTask>();
         }
 
+        public void AddTask(TargetTask task)
+        {
+            Tasks.Add(task);
+        }
+
+        public void RemoveTask(TargetTask task)
+        {
+            Tasks.Remove(task);
+        }
 
         private DateTime? GetDateFromSqliteFormat(string value)
         {
@@ -84,6 +105,14 @@ namespace Planner.Model.Target
             {
                 return null;
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

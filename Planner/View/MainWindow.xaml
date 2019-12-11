@@ -273,7 +273,8 @@
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">
-            <ListBox ItemsSource="{Binding TargetList.Items}"
+            <ListBox x:Name="TargetsListBox"
+                     ItemsSource="{Binding TargetList.Items}"
                      SelectedItem="{Binding SelectedTarget, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -287,9 +288,11 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding Path=Name}"/>
-                                <Button x:Name="DeleteTarget_Button"/>
-                                <Button x:
+                                <TextBlock Grid.Column="0" Text="{Binding Path=Name}"/>
+                                <Button Grid.Column="1" Content="[x]" 
+                                Command="{Binding ElementName=TargetsListBox, Path=DataContext.DeleteTargetCommand}" 
+                                CommandParameter="{Binding }" />
+                                
 
                             </Grid>
                         </Border>

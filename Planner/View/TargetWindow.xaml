@@ -196,6 +196,39 @@
                          CommandParameter="3"/>
             </StackPanel>
             <DatePicker Text="{Binding SelectedTarget.LastDate}"/>
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding SelectedTargetTask.Name}" Margin="5" Width="150"/>
+                <TextBox Text="{Binding SelectedTargetTask.Description}" Margin="5" Width="300"/>
+                <Button Content="Добавить" Margin="5"  Command="{Binding AddTargetTaskCommand}"/>
+            </StackPanel>
+
+            <ListBox x:Name="TargetTasksListBox"
+                     ItemsSource="{Binding SelectedTarget.Tasks}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Red">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="9*"/>
+                                    <ColumnDefinition Width="1*" MinWidth="30"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Path=Name}"/>
+                                <Button Grid.Column="1" Content="[x]" 
+                                Command="{Binding ElementName=TargetTasksListBox, Path=DataContext.DeleteTargetTaskCommand}" 
+                                CommandParameter="{Binding }" />
+
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
             <Button Content="Сохранить"
                      Command="{Binding AddTargetCommand}"
                     />

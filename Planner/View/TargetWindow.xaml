@@ -182,17 +182,17 @@
                 <Button x:Uid="1" Style="{StaticResource ExclamationPointButtonStyle}"
                         x:Name="FirstExclamationPoint_button"
                         Foreground="{Binding LowImportantButtonColor}"
-                        Command="{Binding SetSelectedTargetImportantValue}"
+                        Command="{Binding SetSelectedTargetImportantValueCommand}"
                         CommandParameter="1"/>
                 <Button x:Uid="2" Style="{StaticResource ExclamationPointButtonStyle}"
                         x:Name="SecondExclamationPoint_button"
                         Foreground="{Binding MiddleImportantButtonColor}"
-                         Command="{Binding SetSelectedTargetImportantValue}"
+                         Command="{Binding SetSelectedTargetImportantValueCommand}"
                          CommandParameter="2"/>
                 <Button x:Uid="3" Style="{StaticResource ExclamationPointButtonStyle}"
                         x:Name="ThirdExclamationPoint_button"
                          Foreground="{Binding HighImportantButtonColor}"
-                         Command="{Binding SetSelectedTargetImportantValue}"
+                         Command="{Binding SetSelectedTargetImportantValueCommand}"
                          CommandParameter="3"/>
             </StackPanel>
             <DatePicker Text="{Binding SelectedTarget.LastDate}"/>

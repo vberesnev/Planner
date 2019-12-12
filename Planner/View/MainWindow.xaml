@@ -270,6 +270,13 @@
                    x:Name="Footer"
                    Background="Blue"
                    Height="50">
+            <Button x:Name="UndoButton" Visibility="{Binding UndoVisibility}" Command="{Binding UndoCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Отмена" Margin="5"/>
+                    <TextBlock Text="{Binding UndoCounter}" Margin="5"/>
+                </StackPanel>
+            </Button>
+
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">

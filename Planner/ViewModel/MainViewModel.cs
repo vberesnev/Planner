@@ -5,7 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Planner.Model;
 using Planner.Model.Target;
 
@@ -254,66 +256,57 @@ namespace Planner.ViewModel
 
         #region Команда установки пункта меню
         private RelayCommand setMenuItemCommand;
-        public RelayCommand SetMenuItemCommand
+        public RelayCommand SetMenuItemCommand => setMenuItemCommand;
+
+        private void SetMenuItem(object obj)
         {
-            get
+            int parametr;
+            if (Int32.TryParse(obj.ToString(), out parametr))
             {
-                return setMenuItemCommand ??
-                  (setMenuItemCommand = new RelayCommand(obj =>
-                  {
-                      int parametr;
-                      if (Int32.TryParse(obj.ToString(), out parametr))
-                      {
-                          switch (parametr)
-                          {
-                              case 0:
-                                  currentMenuItem = MenuItem.Year;
-                                  break;
-                              case 1:
-                                  currentMenuItem = MenuItem.Month;
-                                  break;
-                              case 2:
-                                  currentMenuItem = MenuItem.Week;
-                                  break;
-                              case 3:
-                                  currentMenuItem = MenuItem.Day;
-                                  break;
-                              case 4:
-                                  currentMenuItem = MenuItem.Overdue;
-                                  break;
-                              case 5:
-                                  currentMenuItem = MenuItem.Done;
-                                  break;
-                          }
-                          SetTitle();
-                      }
-                  }));
+                switch (parametr)
+                {
+                    case 0:
+                        currentMenuItem = MenuItem.Year;
+                        break;
+                    case 1:
+                        currentMenuItem = MenuItem.Month;
+                        break;
+                    case 2:
+                        currentMenuItem = MenuItem.Week;
+                        break;
+                    case 3:
+                        currentMenuItem = MenuItem.Day;
+                        break;
+                    case 4:
+                        currentMenuItem = MenuItem.Overdue;
+                        break;
+                    case 5:
+                        currentMenuItem = MenuItem.Done;
+                        break;
+                }
+                SetTitle();
             }
         }
         #endregion
 
-        private RelayCommand setSelectedTargetImportantValue;
-        public RelayCommand SetSelectedTargetImportantValue
-        {
-            get
-            {
-                return setSelectedTargetImportantValue ??
-                  (setSelectedTargetImportantValue = new RelayCommand(obj =>
-                  {
-                      int parametr;
-                      if (Int32.TryParse(obj.ToString(), out parametr))
-                      {
-                          if (parametr == (int)SelectedTarget.Important)
-                          {
-                              SelectedTarget.Important = 0;
-                              parametr = 0;
-                          }
-                          else
-                              SelectedTarget.Important = (Important)parametr;
+        #region Команда установки восклицательного знака в зависимости от важности цели
+        private RelayCommand setSelectedTargetImportantValueCommand;
+        public RelayCommand SetSelectedTargetImportantValueCommand => setSelectedTargetImportantValueCommand;
 
-                          SetExclamationPointButton(parametr);
-                      }
-                  }));
+        private void SetSelectedTargetImportantValue(object obj)
+        {
+            int parametr;
+            if (Int32.TryParse(obj.ToString(), out parametr))
+            {
+                if (parametr == (int)SelectedTarget.Important)
+                {
+                    SelectedTarget.Important = 0;
+                    parametr = 0;
+                }
+                else
+                    SelectedTarget.Important = (Important)parametr;
+
+                SetExclamationPointButton(parametr);
             }
         }
 
@@ -362,73 +355,107 @@ namespace Planner.ViewModel
             get { return highImportantButtonColor; }
             set { highImportantButtonColor = value; OnPropertyChanged("HighImportantButtonColor"); }
         }
+        #endregion
 
+        #region Команда добавления новой цели в список целей
         private RelayCommand addTargetCommand;
-        public RelayCommand AddTargetCommand
+        public RelayCommand AddTargetCommand => addTargetCommand;
+        
+        private void AddTarget(object obj)
         {
-            get
+            if (SelectedTarget.Id == 0)
             {
-                return addTargetCommand ??
-                  (addTargetCommand = new RelayCommand(obj =>
-                  {
-                      if (SelectedTarget.Id == 0)
-                      {
-                          int periodValue = 0;
-                          switch (SelectedTarget.TargetType)
-                          {
-                              case TargetType.Year:
-                                  periodValue = CurrentYear.Data;
-                                  break;
-                              case TargetType.Month:
-                                  periodValue = currentMonth.Data.Key;
-                                  break;
-                              case TargetType.Week:
-                                  periodValue = CurrentWeek.Data.Key;
-                                  break;
-                              case TargetType.Day:
-                                  periodValue = CurrentDay.Data.Key;
-                                  break;
-                          }
-                          Target newTarget = new Target(SelectedTarget.Name, 
-                                                        SelectedTarget.Description, 
-                                                        SelectedTarget.TargetType, 
-                                                        CurrentYear.Data, periodValue, 
-                                                        SelectedTarget.LastDate, 
-                                                        SelectedTarget.Important, null);
-                          newTarget.Tasks = SelectedTarget.Tasks;
-                          TargetList.Add(newTarget);
-                      }
-
-                      //Target target = new Target("Новая цель", "Описание", TargetType.Year, 2019, 2019, new DateTime(2019, 12, 31), Important.None, null);
-
-                      //TargetTask task1 = new TargetTask("Задача для новой цели", "ее описание", target);
-                      //TargetTask task2 = new TargetTask("Задача 2 для новой цели", "ее описание", target);
-                      //target.Tasks.Add(task1);
-                      //target.Tasks.Add(task2);
-
-                      //TargetList.Add(target);
-
-                  }));
+                int periodValue = 0;
+                switch (SelectedTarget.TargetType)
+                {
+                    case TargetType.Year:
+                        periodValue = CurrentYear.Data;
+                        break;
+                    case TargetType.Month:
+                        periodValue = currentMonth.Data.Key;
+                        break;
+                    case TargetType.Week:
+                        periodValue = CurrentWeek.Data.Key;
+                        break;
+                    case TargetType.Day:
+                        periodValue = CurrentDay.Data.Key;
+                        break;
+                }
+                Target newTarget = new Target(SelectedTarget.Name,
+                                              SelectedTarget.Description,
+                                              SelectedTarget.TargetType,
+                                              CurrentYear.Data, periodValue,
+                                              SelectedTarget.LastDate,
+                                              SelectedTarget.Important, null);
+                newTarget.Tasks = SelectedTarget.Tasks;
+                TargetList.Add(newTarget);
             }
         }
+        #endregion
 
+        #region Удалить цель из списка целей асинхронно, путем счетчика
         private RelayCommand deleteTargetCommand;
-        public RelayCommand DeleteTargetCommand
+        public RelayCommand DeleteTargetCommand => deleteTargetCommand;
+        
+        private async void DeleteTarget(object obj)
         {
-            get
+            var result = await Task.Run(() => TikTak());
+            if (result)
             {
-                return deleteTargetCommand ??
-                  (deleteTargetCommand = new RelayCommand(obj =>
-                  {
-                      Target deleteTarget = obj as Target;
-                      if (deleteTarget != null)
-                      {
-                          TargetList.Remove(deleteTarget);
-                      }
-                  }));
+                Target deleteTarget = obj as Target;
+                if (deleteTarget != null)
+                {
+                    TargetList.Remove(deleteTarget);
+                }
             }
         }
 
+        private bool undo;
+
+        private RelayCommand undoCommand;
+        public RelayCommand UndoCommand => undoCommand;
+
+        private int undoCounter;
+        public int UndoCounter
+        {
+            get { return undoCounter; }
+            set
+            {
+                undoCounter = value;
+                OnPropertyChanged("UndoCounter");
+            }
+        }
+
+        private string undoVisibility;
+        public string UndoVisibility
+        {
+            get { return undoVisibility; }
+            set
+            {
+                undoVisibility = value;
+                OnPropertyChanged("UndoVisibility");
+            }
+        }
+
+        private bool TikTak()
+        {
+            UndoVisibility = "Visible";
+            for (int i = 5; i > 0; i--)
+            {
+                UndoCounter = i;
+                Thread.Sleep(1000);
+                if (undo)
+                {
+                    UndoVisibility = "Hidden";
+                    undo = false;
+                    return false;
+                }
+            }
+            UndoVisibility = "Hidden";
+            undo = false;
+            return true;
+        }
+        #endregion
 
         private RelayCommand addTargetTaskCommand;
         public RelayCommand AddTargetTaskCommand
@@ -443,7 +470,6 @@ namespace Planner.ViewModel
                           SelectedTarget.AddTask(SelectedTargetTask);
                           SelectedTargetTask = new TargetTask();
                       }
-                        
                   }));
             }
         }
@@ -465,7 +491,7 @@ namespace Planner.ViewModel
             }
         }
 
-
+        //Текст заголовка на форме
         private string titleText;
         public string TitleText
         {
@@ -477,11 +503,15 @@ namespace Planner.ViewModel
             }
         }
 
+        //Двунаправленные связанные списки (лет, месяцев, недель, дней). Нужны для каруселей выбора дат
         private DoublyNodeLinkedList<int> yearsList;
         private DoublyNodeLinkedList<DateValue> monthsList;
         private DoublyNodeLinkedList<DateValue> weeksList;
         private DoublyNodeLinkedList<DateValue> daysList;
 
+        /// <summary>
+        /// Текущее значение пункта меню
+        /// </summary>
         private MenuItem currentMenuItem;
 
         private TargetList targetList;
@@ -519,6 +549,13 @@ namespace Planner.ViewModel
 
         public MainViewModel()
         {
+            setMenuItemCommand = new RelayCommand(SetMenuItem);
+            setSelectedTargetImportantValueCommand = new RelayCommand(SetSelectedTargetImportantValue);
+            undoCommand = new RelayCommand((obj) => undo = true); //команда Отмены удаления (ставит флаг undo в true)
+
+            addTargetCommand = new RelayCommand(AddTarget);
+            deleteTargetCommand = new RelayCommand(DeleteTarget);
+
             currentMenuItem = MenuItem.Year;
             FillYearList(DateTime.Now.Year);
             CurrentYear = yearsList.Current(DateTime.Now.Year);
@@ -528,8 +565,13 @@ namespace Planner.ViewModel
             LowImportantButtonColor = "Gray";
             MiddleImportantButtonColor = "Gray";
             HighImportantButtonColor = "Gray";
+
+            UndoVisibility = "Hidden";
         }
 
+        /// <summary>
+        /// Метод определения типа "Выбранной Цели" (годовая, месячная, недельная, дневная). Используется при нажатии кнопки "Добавить цель"
+        /// </summary>
         public void SetNewSelectedTarget()
         {
             switch (currentMenuItem)
@@ -554,6 +596,10 @@ namespace Planner.ViewModel
             SelectedTargetTask = new TargetTask();
         }
 
+        /// <summary>
+        /// Заполнить двунаправленный связанный список лет
+        /// </summary>
+        /// <param name="year">Год, от которого вести отчёт</param>
         private void FillYearList(int year)
         {
             yearsList = new DoublyNodeLinkedList<int>();
@@ -563,6 +609,10 @@ namespace Planner.ViewModel
             }
         }
 
+        /// <summary>
+        /// Заполнить двунаправленный связанный список месяцев
+        /// </summary>
+        /// <param name="year">Год (от значения года зависит високосный год или нет)</param>
         private void FillMonthsList(int year)
         {
             monthsList = new DoublyNodeLinkedList<DateValue>();
@@ -585,6 +635,10 @@ namespace Planner.ViewModel
             monthsList.Add(new DoublyNode<DateValue>(new DateValue(12, "декабрь", new DateTime(year, 12, 1, 0, 0, 0), new DateTime(year, 12, 31, 23, 59, 59))));
         }
 
+        /// <summary>
+        /// Заполнить двунаправленный связанный список недель в году
+        /// </summary>
+        /// <param name="year">От значения года зависит дата первого дня первой недели</param>
         private void FillWeeksList(int year)
         {
             weeksList = new DoublyNodeLinkedList<DateValue>();
@@ -624,6 +678,10 @@ namespace Planner.ViewModel
             }
         }
 
+        /// <summary>
+        /// Заполнить двунаправленный связанный список дней в году
+        /// </summary>
+        /// <param name="year">Год (от значения года зависит високосный год или нет)</param>
         private void FillDaysList(int year)
         {
             daysList = new DoublyNodeLinkedList<DateValue>();
@@ -636,6 +694,9 @@ namespace Planner.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод установки заголовка 
+        /// </summary>
         private void SetTitle()
         {
             switch (currentMenuItem)

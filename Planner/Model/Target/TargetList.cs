@@ -34,9 +34,12 @@ namespace Planner.Model.Target
             db = new PlannerContext();
         } 
 
-        public void Load()
+        public void Load(int targetType, int periodValue)
         {
-            Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks).Include(u => u.Owner).ToList());
+            Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
+                                                               .Include(u => u.Owner)
+                                                               .Where(x => (int)x.TargetType == targetType && x.PeriodValue == periodValue)
+                                                               .ToList());
         }
 
         public void Add(Target item)

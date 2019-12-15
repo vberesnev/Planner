@@ -78,6 +78,8 @@ namespace Planner.ViewModel
                 SetTitle();
 
                 OnPropertyChanged("CurrentYear");
+
+                TargetList.Load(365, CurrentYear.Data);
             }
         }
         #endregion
@@ -118,6 +120,7 @@ namespace Planner.ViewModel
                 currentMonth = value;
                 SetTitle();
                 OnPropertyChanged("CurrentMonth");
+                TargetList.Load(30, CurrentMonth.Data.Key);
             }
         }
         #endregion
@@ -184,6 +187,7 @@ namespace Planner.ViewModel
                 currentWeek = value;
                 SetTitle();
                 OnPropertyChanged("CurrentWeek");
+                TargetList.Load(7, CurrentWeek.Data.Key);
             }
         }
         #endregion
@@ -250,6 +254,7 @@ namespace Planner.ViewModel
                 currentDay = value;
                 SetTitle();
                 OnPropertyChanged("CurrentDay");
+                TargetList.Load(1, CurrentDay.Data.Key);
             }
         }
         #endregion
@@ -267,15 +272,19 @@ namespace Planner.ViewModel
                 {
                     case 0:
                         currentMenuItem = MenuItem.Year;
+                        TargetList.Load(365, CurrentYear.Data);
                         break;
                     case 1:
                         currentMenuItem = MenuItem.Month;
+                        TargetList.Load(30, CurrentMonth.Data.Key);
                         break;
                     case 2:
                         currentMenuItem = MenuItem.Week;
+                        TargetList.Load(7, CurrentWeek.Data.Key);
                         break;
                     case 3:
                         currentMenuItem = MenuItem.Day;
+                        TargetList.Load(1, CurrentDay.Data.Key);
                         break;
                     case 4:
                         currentMenuItem = MenuItem.Overdue;
@@ -567,6 +576,8 @@ namespace Planner.ViewModel
 
         public MainViewModel()
         {
+            TargetList = new TargetList();
+
             setMenuItemCommand = new RelayCommand(SetMenuItem);
             setSelectedTargetImportantValueCommand = new RelayCommand(SetSelectedTargetImportantValue);
             undoCommand = new RelayCommand((obj) => undo = true); //команда Отмены удаления (ставит флаг undo в true)
@@ -578,8 +589,6 @@ namespace Planner.ViewModel
             currentMenuItem = MenuItem.Year;
             FillYearList(DateTime.Now.Year);
             CurrentYear = yearsList.Current(DateTime.Now.Year);
-            TargetList = new TargetList();
-            TargetList.Load();
 
             LowImportantButtonColor = "Gray";
             MiddleImportantButtonColor = "Gray";

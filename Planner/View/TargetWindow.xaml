@@ -196,7 +196,9 @@
                          CommandParameter="3"/>
             </StackPanel>
             <DatePicker SelectedDate="{Binding SelectedTarget.LastDate}" />
-            
+
+            <DatePicker SelectedDate="{Binding SelectedTarget.ProlongationDate}" Visibility="Collapsed" x:Name="ProlongationDate_datePicker"/>
+
             <StackPanel Orientation="Horizontal">
                 <TextBox Text="{Binding SelectedTargetTask.Name}" Margin="5" Width="150"/>
                 <TextBox Text="{Binding SelectedTargetTask.Description}" Margin="5" Width="300"/>

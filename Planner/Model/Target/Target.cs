@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Planner.Model.Target
 {
     public class Target : INotifyPropertyChanged
     {
+        [Key]
         public int Id { get; set; }
         private string name;
         public string Name
@@ -71,7 +73,7 @@ namespace Planner.Model.Target
             Tasks = new ObservableCollection<TargetTask>();
         }
 
-        public Target(string name, string desc, TargetType targetType, int year, int periodValue, DateTime? lastDate, Important important, User owner)
+        public Target(string name, string desc, TargetType targetType, int year, int periodValue, DateTime? lastDate, Important important, User owner )
         {
             Name = name;
             Description = desc;
@@ -98,6 +100,34 @@ namespace Planner.Model.Target
             Tasks = new ObservableCollection<TargetTask>();
         }
 
+        private Target(int  id, string name, string desc, TargetType targetType, int year, int periodValue, DateTime? lastDate, DateTime? prolongationDate, Important important, User owner, bool done)
+        {
+            Id = id;
+            Name = name;
+            Description = desc;
+            TargetType = targetType;
+            Year = year;
+            PeriodValue = periodValue;
+            if (lastDate == null)
+                LastDate = PeriodFinish;
+            else
+                LastDate = lastDate;
+            ProlongationDate = prolongationDate;
+            Important = important;
+            if (owner == null)
+            {
+                Owner = null;
+                ForAllUsers = true;
+            }
+            else
+            {
+                Owner = owner;
+                ForAllUsers = false;
+            }
+            Done = done;
+            Tasks = new ObservableCollection<TargetTask>();
+        }
+
         public void AddTask(TargetTask task)
         {
             Tasks.Add(task);
@@ -106,6 +136,37 @@ namespace Planner.Model.Target
         public void RemoveTask(TargetTask task)
         {
             Tasks.Remove(task);
+        }
+
+        public void EditTask(Target newTarget)
+        {
+            this.Name = newTarget.Name;
+            this.Description = newTarget.Description;
+            this.TargetType = newTarget.TargetType;
+            this.Year = newTarget.Year;
+            this.PeriodValue = newTarget.PeriodValue;
+
+            if (newTarget.LastDate == null)
+                this.LastDate = newTarget.PeriodFinish;
+            else
+                this.LastDate = newTarget.LastDate;
+
+            this.ProlongationDate = newTarget.ProlongationDate;
+            this.Important = newTarget.Important;
+
+            if (newTarget.Owner == null)
+            {
+                this.Owner = null;
+                this.ForAllUsers = true;
+            }
+            else
+            {
+                Owner = this.Owner;
+                this.ForAllUsers = false;
+            }
+
+            this.Done = newTarget.Done;
+            //this.Tasks = newTarget.Tasks;
         }
 
         /// <summary>
@@ -143,6 +204,16 @@ namespace Planner.Model.Target
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public Target Clone()
+        {
+            Target cloneTarget = new Target(this.Id, this.Name, this.Description, this.TargetType, this.Year, this.PeriodValue, this.LastDate, this.ProlongationDate, this.Important, this.Owner, this.Done);
+            foreach(var task in this.Tasks)
+            {
+                cloneTarget.Tasks.Add(task.Clone());
+            }
+            return cloneTarget;
         }
     }
 }

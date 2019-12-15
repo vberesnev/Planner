@@ -390,6 +390,11 @@ namespace Planner.ViewModel
                 newTarget.Tasks = SelectedTarget.Tasks;
                 TargetList.Add(newTarget);
             }
+            else
+            {
+                TargetList.Edit(SelectedTarget);
+            }
+            CloseAction();
         }
         #endregion
 
@@ -556,7 +561,9 @@ namespace Planner.ViewModel
                 selectedTargetTask = value;
                 OnPropertyChanged("SelectedTargetTask");
             }
-        }      
+        }
+
+        public Action CloseAction { get; set; }
 
         public MainViewModel()
         {
@@ -603,8 +610,13 @@ namespace Planner.ViewModel
                 default:
                     break;
             }
-            //SelectedTarget.AddTask(new TargetTask() { Name = "1", Description = "2" });
-            //SelectedTarget.AddTask(new TargetTask() { Name = "1", Description = "2" });
+            SelectedTargetTask = new TargetTask();
+        }
+
+        public void SetNewSelectedTarget(int id)
+        {
+            SelectedTarget = TargetList.Items.FirstOrDefault(x => x.Id == id).Clone();
+            SetExclamationPointButton((int)SelectedTarget.Important);
             SelectedTargetTask = new TargetTask();
         }
 

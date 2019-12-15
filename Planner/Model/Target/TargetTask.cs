@@ -11,6 +11,7 @@ namespace Planner.Model.Target
 {
     public class TargetTask : INotifyPropertyChanged
     {
+        [Key]
         public int Id { get; set; }
         private string name;
         public string Name
@@ -35,12 +36,26 @@ namespace Planner.Model.Target
             Target = target;
         }
 
+        private TargetTask(int id, string name, string desc, bool done, Target target)
+        {
+            Id = id;
+            Name = name;
+            Description = desc;
+            Done = done;
+            Target = target;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public TargetTask Clone()
+        {
+            return new TargetTask(this.Id, this.Name, this.Description, this.Done, this.Target);
         }
     }
 }

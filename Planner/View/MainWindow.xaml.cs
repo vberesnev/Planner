@@ -136,10 +136,10 @@ namespace Planner
         {
             //создаю новый объект цели для добавления
             ((MainViewModel)this.DataContext).SetNewSelectedTarget();
-            ShowTargetWindow();
+            ShowNewTargetWindow(true);
         }
 
-        private void ShowTargetWindow()
+        private void ShowNewTargetWindow(bool isNewTarget)
         {
             TargetWindow TW = new TargetWindow();
             TW.Owner = this;
@@ -148,7 +148,21 @@ namespace Planner
             TW.WeekFilterPanel.Visibility = this.WeekFilterPanel.Visibility;
             TW.DayFilterPanel.Visibility = this.DayFilterPanel.Visibility;
             TW.DataContext = this.DataContext;
+            ((MainViewModel)this.DataContext).CloseAction = TW.Close;
+            if (!isNewTarget)
+                TW.ProlongationDate_datePicker.Visibility = Visibility.Visible;
             TW.ShowDialog();
+        }
+
+        private void EditButton_click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button != null)
+            {
+                int id = Convert.ToInt32(button.Uid);
+                ((MainViewModel)this.DataContext).SetNewSelectedTarget(id);
+                ShowNewTargetWindow(false);
+            }
         }
     }
 }

@@ -46,6 +46,39 @@ namespace Planner.Model.Target
             Save();
         }
 
+        public void Edit(Target newTarget)
+        {
+            var editItem = db.Targets.Include(t => t.Tasks).Include(u => u.Owner).FirstOrDefault(x => x.Id == newTarget.Id);
+            if (editItem != null)
+            {
+                //удаляю все старые задачи
+                foreach (var task in GetRemovebleTargerTasksList(editItem, newTarget))
+                {
+                    db.TargetTasks.Remove(task);
+                }
+                //добавляю все новые задачи
+                foreach (var task in newTarget.Tasks.Where(x => x.Id == 0))
+                {
+                    task.Target = editItem;
+                    db.TargetTasks.Add(task);
+                }
+                //редактирую саму цель
+                editItem.EditTask(newTarget);
+                Save();
+            }
+        }
+
+        private List<TargetTask> GetRemovebleTargerTasksList(Target oldTarget, Target newTarget)
+        {
+            List<TargetTask> list = new List<TargetTask>();
+            foreach(var taskOld in oldTarget.Tasks)
+            {
+                if (newTarget.Tasks.Where(x => x.Id == taskOld.Id).Count() == 0)
+                    list.Add(taskOld);
+            }
+            return list;
+        }
+
         public void Remove(Target item)
         {
             Items.Remove(item);
@@ -66,5 +99,7 @@ namespace Planner.Model.Target
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
+        
     }
 }

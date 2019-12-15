@@ -393,7 +393,7 @@ namespace Planner.ViewModel
         }
         #endregion
 
-        #region Удалить цель из списка целей асинхронно, путем счетчика
+        #region Команда удаления цели из списка целей (АСИНХРОННО, для отмены используется счетчик и кнопка отмены)
         private RelayCommand deleteTargetCommand;
         public RelayCommand DeleteTargetCommand => deleteTargetCommand;
         
@@ -454,6 +454,17 @@ namespace Planner.ViewModel
             UndoVisibility = "Hidden";
             undo = false;
             return true;
+        }
+        #endregion
+
+        #region Команда разворачивание и сворачивание карточки цели
+        private RelayCommand minimizeMaximizeItemCommand;
+        public RelayCommand MinimizeMaximizeItemCommand => minimizeMaximizeItemCommand;
+        public void MinimizeMaximizeItem(object obj)
+        {
+            Target target = obj as Target;
+            if (target != null)
+                target.ChangeView();
         }
         #endregion
 
@@ -545,13 +556,14 @@ namespace Planner.ViewModel
                 selectedTargetTask = value;
                 OnPropertyChanged("SelectedTargetTask");
             }
-        }
+        }      
 
         public MainViewModel()
         {
             setMenuItemCommand = new RelayCommand(SetMenuItem);
             setSelectedTargetImportantValueCommand = new RelayCommand(SetSelectedTargetImportantValue);
             undoCommand = new RelayCommand((obj) => undo = true); //команда Отмены удаления (ставит флаг undo в true)
+            minimizeMaximizeItemCommand = new RelayCommand(MinimizeMaximizeItem);
 
             addTargetCommand = new RelayCommand(AddTarget);
             deleteTargetCommand = new RelayCommand(DeleteTarget);
@@ -722,12 +734,22 @@ namespace Planner.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод получения номера недели в зависимости от даты 
+        /// </summary>
+        /// <param name="date">Дата</param>
+        /// <returns>Объект DateValue с ключом - значением номером недели в году</returns>
         private DateValue NumberOfWeek(DateTime date)
         {
             var calendar = new GregorianCalendar();
             return new DateValue(calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday));
         }
 
+        /// <summary>
+        /// Метод получения номера последней недели в году
+        /// </summary>
+        /// <param name="year">Год</param>
+        /// <returns>Номер недели</returns>
         private int NumberOfLastWeekInYear(int year)
         {
             DateTime lastDay = new DateTime(year, 12, 31);

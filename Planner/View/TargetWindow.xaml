@@ -195,7 +195,7 @@
                          Command="{Binding SetSelectedTargetImportantValueCommand}"
                          CommandParameter="3"/>
             </StackPanel>
-            <DatePicker Text="{Binding SelectedTarget.LastDate}"/>
+            <DatePicker SelectedDate="{Binding SelectedTarget.LastDate}" />
             
             <StackPanel Orientation="Horizontal">
                 <TextBox Text="{Binding SelectedTargetTask.Name}" Margin="5" Width="150"/>

@@ -276,7 +276,6 @@
                     <TextBlock Text="{Binding UndoCounter}" Margin="5"/>
                 </StackPanel>
             </Button>
-
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">
@@ -290,24 +289,34 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="9*"/>
                                     <ColumnDefinition Width="1*" MinWidth="30"/>
+                                    <ColumnDefinition Width="1*" MinWidth="30"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding Path=Name}"/>
+                                <StackPanel Grid.Column="0" Background="{Binding Path=BackColor}">
+                                    <CheckBox Grid.Column="2" IsChecked="{Binding Path=Done, Mode=TwoWay}"/>
+                                    <TextBlock Text="{Binding Path=Name}"/>
+                                    <StackPanel x:Name="FullView" Visibility="{Binding Path=FullView}">
+                                        <TextBlock Text="{Binding Path=Description}"/>
+                                    </StackPanel>
+                                </StackPanel>
                                 <Button Grid.Column="1" Content="[x]" 
                                 Command="{Binding ElementName=TargetsListBox, Path=DataContext.DeleteTargetCommand}" 
                                 CommandParameter="{Binding }" />
+                                <Button Grid.Column="2" Content="[!]" 
+                                Command="{Binding ElementName=TargetsListBox, Path=DataContext.MinimizeMaximizeItemCommand}" 
+                                 CommandParameter="{Binding }"/>
                                 
-
+                                        
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
-            
+
+
             <Button x:Name="PlusButton" 
                 Panel.ZIndex="100"
                 HorizontalAlignment="Right"
@@ -315,7 +324,6 @@
                 ToolTip="Создать задачу"
             Style="{StaticResource RoundedButtonStyle}"
             Click="PlusButton_click">
-                   
                 <Image Source="/Resources/white_plus.png"
                 Width="30" Height="30"
                 Margin="0"/>

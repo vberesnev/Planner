@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -32,7 +33,9 @@ namespace Planner.Model.Target
         public int? UserId { get; set; }
         public User Owner { get; set; }
         public bool ForAllUsers { get; set; }
-        public bool Done { get; set; }
+        private bool done;
+        public bool Done
+        { get { return done; } set { done = value; OnPropertyChanged("Done"); OnPropertyChanged("BackColor"); } }
 
         private ObservableCollection<TargetTask> tasks;
         public ObservableCollection<TargetTask> Tasks { get { return tasks; } set { tasks = value; OnPropertyChanged("Tasks"); } }
@@ -41,7 +44,23 @@ namespace Planner.Model.Target
         public DateTime PeriodStart => DateOperations.PeriodStart(TargetType, Year, PeriodValue);
         public DateTime PeriodFinish => DateOperations.PeriodFinish(TargetType, Year, PeriodValue);
 
-        
+        private string fullView = "Collapsed";
+        [NotMapped]
+        public string FullView
+        { get { return fullView; } set { fullView = value; OnPropertyChanged("FullView"); } }
+
+        [NotMapped]
+        public string BackColor
+        {
+            get
+            {
+                if (Done) return "LightGreen";
+
+                else if (LastDate < DateTime.Now) return "LightCoral";
+
+                else return "Transparent";
+            }
+        }
 
 
         public Target() { }
@@ -87,6 +106,17 @@ namespace Planner.Model.Target
         public void RemoveTask(TargetTask task)
         {
             Tasks.Remove(task);
+        }
+
+        /// <summary>
+        /// Скрыть/раскрыть карточку задачи
+        /// </summary>
+        public void ChangeView()
+        {
+            if (FullView == "Visible")
+                FullView = "Collapsed";
+            else
+                FullView = "Visible";
         }
 
         private DateTime? GetDateFromSqliteFormat(string value)

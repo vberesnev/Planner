@@ -42,6 +42,22 @@ namespace Planner.Model.Target
                                                                .ToList());
         }
 
+        public void LoadDone()
+        {
+            Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
+                                                              .Include(u => u.Owner)
+                                                              .Where(x=> x.Done == true)
+                                                              .ToList());
+        }
+
+        public void LoadOverdue()
+        {
+            Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
+                                                              .Include(u => u.Owner)
+                                                              .Where(x => x.LastDate < DateTime.Now && x.Done == false)
+                                                              .ToList());
+        }
+
         public void Add(Target item)
         {
             Items.Add(item);

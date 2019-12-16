@@ -16,6 +16,24 @@ namespace Planner.ViewModel
     public class MainViewModel : INotifyPropertyChanged
     {
 
+        private async void SetTargetList(int targetType, int periodValue)
+        {
+            SetTitle();
+            InfoText = "Подождите, идёт загрузка . . .";
+            InfoTextZIndex = 100;
+            await Task.Run(() => Load(targetType, periodValue));
+        }
+
+        private void Load(int targetType, int periodValue)
+        {
+            Thread.Sleep(2000);
+            TargetList.Load(targetType, periodValue);
+            if (TargetList.Items.Count > 0)
+                InfoTextZIndex = 0;
+            else
+                InfoText = "Целей нет, придумай что-нибудь";
+        }
+        
         #region Карусель ГОД
         private RelayCommand previousYearCommand;
         public RelayCommand PreviousYearCommand
@@ -75,11 +93,8 @@ namespace Planner.ViewModel
                 else
                     CurrentDay = daysList.Current(new DateValue(DateTime.Now.DayOfYear));
 
-                SetTitle();
-
                 OnPropertyChanged("CurrentYear");
-
-                TargetList.Load(365, CurrentYear.Data);
+                SetTargetList(365, CurrentYear.Data);
             }
         }
         #endregion
@@ -569,6 +584,29 @@ namespace Planner.ViewModel
             {
                 selectedTargetTask = value;
                 OnPropertyChanged("SelectedTargetTask");
+            }
+        }
+
+        private string infoText;
+        public string InfoText
+        {
+            get { return infoText; }
+            set
+            {
+                infoText = value;
+                OnPropertyChanged("InfoText");
+            }
+        }
+
+        //Z индекс для строки "Нет целей"
+        private int infoTextZIndex;
+        public int InfoTextZIndex
+        {
+            get { return infoTextZIndex; }
+            set
+            {
+                infoTextZIndex = value;
+                OnPropertyChanged("InfoTextZIndex");
             }
         }
 

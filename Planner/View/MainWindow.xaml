@@ -279,6 +279,9 @@
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">
+
+            <TextBlock Text="{Binding InfoText}"
+                      Panel.ZIndex="{Binding InfoTextZIndex}"/>
             <ListBox x:Name="TargetsListBox"
                      ItemsSource="{Binding TargetList.Items}"
                      SelectedItem="{Binding SelectedTarget, Mode=TwoWay}">
@@ -317,6 +320,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+
 
             <Button x:Name="PlusButton" 
                 Panel.ZIndex="100"

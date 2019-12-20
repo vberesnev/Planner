@@ -69,16 +69,22 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
-            <Button Uid="0" Grid.Column="0" Style="{StaticResource MenuButtonsStyle}" Content="ГОД" Click="MenuButton_Click"
+            <Button Uid="0" Grid.Column="0" Style="{StaticResource MenuButtonsStyle}" Content="{Binding YearMenuValue}" 
+                    Click="MenuButton_Click"
                     Command="{Binding SetMenuItemCommand}"
-                    CommandParameter="0"/>
-            <Button Uid="1" Grid.Column="1" Style="{StaticResource MenuButtonsStyle}" Content="МЕСЯЦ" Click="MenuButton_Click"
+                    CommandParameter="0" />
+
+
+            <Button Uid="1" Grid.Column="1" Style="{StaticResource MenuButtonsStyle}" Content="{Binding MonthMenuValue}" 
+                    Click="MenuButton_Click"
                     Command="{Binding SetMenuItemCommand}"
                     CommandParameter="1"/>
-            <Button Uid="2" Grid.Column="2" Style="{StaticResource MenuButtonsStyle}" Content="НЕДЕЛЯ" Click="MenuButton_Click"
+            <Button Uid="2" Grid.Column="2" Style="{StaticResource MenuButtonsStyle}" Content="{Binding WeekMenuValue}" 
+                    Click="MenuButton_Click"
                     Command="{Binding SetMenuItemCommand}"
                     CommandParameter="2"/>
-            <Button Uid="3" Grid.Column="3" Style="{StaticResource MenuButtonsStyle}" Content="ДЕНЬ" Click="MenuButton_Click"
+            <Button Uid="3" Grid.Column="3" Style="{StaticResource MenuButtonsStyle}" Content="{Binding DayMenuValue}" 
+                    Click="MenuButton_Click"
                     Command="{Binding SetMenuItemCommand}"
                     CommandParameter="3"/>
             <Button Uid="4" Grid.Column="4" Style="{StaticResource MenuButtonRedStyle}" Content="ПРОСРОЧЕННЫЕ" Click="MenuButton_Click"

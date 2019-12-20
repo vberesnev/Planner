@@ -18,17 +18,35 @@ namespace Planner.ViewModel
 
 
         #region Асинхронная загрузка списка задач
-        private async void SetTargetList(int targetType, int periodValue)
+        private async void SetTargetList()
         {
             SetTitle();
             InfoText = "Загрузка . . .";
             InfoTextZIndex = 100;
-            await Task.Run(() => Load(targetType, periodValue));
+            switch (currentMenuItem)
+            {
+                case MenuItem.Year:
+                    await Task.Run(() => Load(365, CurrentYear.Data));
+                    break;
+                case MenuItem.Month:
+                    await Task.Run(() => Load(30, CurrentMonth.Data.Key));
+                    OnPropertyChanged("MonthMenuValue");
+                    break;
+                case MenuItem.Week:
+                    await Task.Run(() => Load(7, CurrentWeek.Data.Key));
+                    OnPropertyChanged("WeekMenuValue");
+                    break;
+                case MenuItem.Day:
+                    await Task.Run(() => Load(1, CurrentDay.Data.Key));
+                    OnPropertyChanged("DayMenuValue");
+                    break;
+            }
+            OnPropertyChanged("YearMenuValue");
         }
 
         private void Load(int targetType, int periodValue)
         {
-            TargetList.Load(targetType, periodValue);
+            TargetList.Load(CurrentYear.Data, targetType, periodValue);
             if (TargetList.Items.Count > 0)
                 InfoTextZIndex = 0;
             else
@@ -46,7 +64,7 @@ namespace Planner.ViewModel
                   (previousYearCommand = new RelayCommand(obj =>
                   {
                       CurrentYear = yearsList.MovePrevious();
-                      SetTargetList(365, CurrentYear.Data);
+                      SetTargetList();
                   }));
             }
         }
@@ -60,7 +78,7 @@ namespace Planner.ViewModel
                   (nextYearCommand = new RelayCommand(obj =>
                   {
                       CurrentYear = yearsList.MoveNext();
-                      SetTargetList(365, CurrentYear.Data);
+                      SetTargetList();
                   }));
             }
         }
@@ -112,7 +130,7 @@ namespace Planner.ViewModel
                   (previousMonthCommand = new RelayCommand(obj =>
                   {
                       CurrentMonth = monthsList.MovePrevious();
-                      SetTargetList(30, CurrentMonth.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -126,7 +144,7 @@ namespace Planner.ViewModel
                   (nextMonthCommand = new RelayCommand(obj =>
                   {
                       CurrentMonth = monthsList.MoveNext();
-                      SetTargetList(30, CurrentMonth.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -153,7 +171,7 @@ namespace Planner.ViewModel
                   (previousWeekommand = new RelayCommand(obj =>
                   {
                       CurrentWeek = weeksList.MovePrevious();
-                      SetTargetList(7, CurrentWeek.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -167,7 +185,7 @@ namespace Planner.ViewModel
                   (previousAnyWeeksCommand = new RelayCommand(obj =>
                   {
                       CurrentWeek = weeksList.MovePrevious(Settings.GetSettings().WeekLongMoveParametr);
-                      SetTargetList(7, CurrentWeek.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -181,7 +199,7 @@ namespace Planner.ViewModel
                   (nextWeekCommand = new RelayCommand(obj =>
                   {
                       CurrentWeek = weeksList.MoveNext();
-                      SetTargetList(7, CurrentWeek.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -195,7 +213,7 @@ namespace Planner.ViewModel
                   (nextAnyWeeksCommand = new RelayCommand(obj =>
                   {
                       CurrentWeek = weeksList.MoveNext(Settings.GetSettings().WeekLongMoveParametr);
-                      SetTargetList(7, CurrentWeek.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -222,7 +240,7 @@ namespace Planner.ViewModel
                   (previousDaykommand = new RelayCommand(obj =>
                   {
                       CurrentDay = daysList.MovePrevious();
-                      SetTargetList(1, CurrentDay.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -236,7 +254,7 @@ namespace Planner.ViewModel
                   (previousAnyDaysCommand = new RelayCommand(obj =>
                   {
                       CurrentDay = daysList.MovePrevious(Settings.GetSettings().DayLongMoveParametr);
-                      SetTargetList(1, CurrentDay.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -250,7 +268,7 @@ namespace Planner.ViewModel
                   (nextDayCommand = new RelayCommand(obj =>
                   {
                       CurrentDay = daysList.MoveNext();
-                      SetTargetList(1, CurrentDay.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -264,7 +282,7 @@ namespace Planner.ViewModel
                   (nextAnyDaysCommand = new RelayCommand(obj =>
                   {
                       CurrentDay = daysList.MoveNext(Settings.GetSettings().DayLongMoveParametr);
-                      SetTargetList(1, CurrentDay.Data.Key);
+                      SetTargetList();
                   }));
             }
         }
@@ -295,19 +313,19 @@ namespace Planner.ViewModel
                 {
                     case 0:
                         currentMenuItem = MenuItem.Year;
-                        SetTargetList(365, CurrentYear.Data);
+                        SetTargetList();
                         break;
                     case 1:
                         currentMenuItem = MenuItem.Month;
-                        SetTargetList(30, CurrentMonth.Data.Key);
+                        SetTargetList();
                         break;
                     case 2:
                         currentMenuItem = MenuItem.Week;
-                        SetTargetList(7, CurrentWeek.Data.Key);
+                        SetTargetList();
                         break;
                     case 3:
                         currentMenuItem = MenuItem.Day;
-                        SetTargetList(1, CurrentDay.Data.Key);
+                        SetTargetList();
                         break;
                     case 4:
                         currentMenuItem = MenuItem.Overdue;
@@ -619,6 +637,11 @@ namespace Planner.ViewModel
 
         public Action CloseAction { get; set; }
 
+        public string YearMenuValue => this.TargetList.YearTargetsCount==0 ? "ГОД" : $"ГОД ({this.TargetList.YearTargetsCount})";
+        public string MonthMenuValue => this.TargetList.MonthTargetsCount == 0 ? "МЕСЯЦ" : $"МЕСЯЦ ({this.TargetList.MonthTargetsCount})";
+        public string WeekMenuValue => this.TargetList.WeekTargetsCount == 0 ? "НЕДЕЛЯ" : $"НЕДЕЛЯ ({this.TargetList.WeekTargetsCount})";
+        public string DayMenuValue => this.TargetList.DayTargetsCount == 0 ? "ДЕНЬ" : $"ДЕНЬ ({this.TargetList.DayTargetsCount})";
+
         public MainViewModel()
         {
             TargetList = new TargetList();
@@ -634,6 +657,7 @@ namespace Planner.ViewModel
             currentMenuItem = MenuItem.Year;
             FillYearList(DateTime.Now.Year);
             CurrentYear = yearsList.Current(DateTime.Now.Year);
+            TargetList.LoadCounters(CurrentYear.Data, CurrentMonth.Data.Key, CurrentWeek.Data.Key, CurrentDay.Data.Key);
             SetMenuItem(0);
 
             LowImportantButtonColor = "Gray";

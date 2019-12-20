@@ -27,6 +27,15 @@ namespace Planner.Model.Target
         public int DoneCount => Items.Where(x => x.Done = true).Count();
         public int OverdueCount => Items.Where(x => x.Done = false).Count();
 
+        private int yearTargetsCount;
+        public int YearTargetsCount { get { return yearTargetsCount; }  set { yearTargetsCount = value; OnPropertyChanged("YearTargetsCount"); } }
+        private int monthTargetsCount;
+        public int MonthTargetsCount { get { return monthTargetsCount; } set { monthTargetsCount = value; OnPropertyChanged("MonthTargetsCount"); } }
+        private int weekTargetsCount;
+        public int WeekTargetsCount { get { return weekTargetsCount; } set { weekTargetsCount = value; OnPropertyChanged("WeekTargetsCount"); } }
+        private int dayTargetsCount;
+        public int DayTargetsCount { get { return dayTargetsCount; } set { dayTargetsCount = value; OnPropertyChanged("DayTargetsCount"); } }
+
         private PlannerContext db;
 
         public TargetList()
@@ -34,12 +43,36 @@ namespace Planner.Model.Target
             db = new PlannerContext();
         } 
 
-        public void Load(int targetType, int periodValue)
+        public void Load(int year, int targetType, int periodValue)
         {
             Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
                                                                .Include(u => u.Owner)
-                                                               .Where(x => (int)x.TargetType == targetType && x.PeriodValue == periodValue)
+                                                               .Where(x => x.Year == year && (int)x.TargetType == targetType && x.PeriodValue == periodValue)
                                                                .ToList());
+            switch (targetType)
+            {
+                case 365:
+                    YearTargetsCount = Items.Count;
+                    break;
+                case 30:
+                    MonthTargetsCount = Items.Count;
+                    break;
+                case 7:
+                    WeekTargetsCount = Items.Count;
+                    break;
+                case 1:
+                    DayTargetsCount = Items.Count;
+                    break;
+            }
+            YearTargetsCount = db.Targets.Where(x => x.Year == year && (int)x.TargetType == 365 && x.PeriodValue == year && x.Done == false).Count();
+        }
+
+        public void LoadCounters(int yearPeriod, int monthPeriod, int weekPeriod, int dayPeriod)
+        {
+            YearTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 365 && x.PeriodValue == yearPeriod && x.Done == false).Count();
+            MonthTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 30 && x.PeriodValue == monthPeriod && x.Done == false).Count();
+            WeekTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 7 && x.PeriodValue == weekPeriod && x.Done == false).Count();
+            DayTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 1 && x.PeriodValue == dayPeriod && x.Done == false).Count();
         }
 
         public void LoadDone()

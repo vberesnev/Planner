@@ -115,9 +115,15 @@ namespace Planner.Model.Target
                     db.TargetTasks.Add(task);
                 }
                 //редактирую саму цель
-                editItem.EditTask(newTarget);
+                editItem.EditTarget(newTarget);
                 Save();
             }
+        }
+
+        public void Done(Target target)
+        {
+            var editItem = db.Targets.FirstOrDefault(x => x.Id == target.Id);
+            Save();
         }
 
         private List<TargetTask> GetRemovebleTargerTasksList(Target oldTarget, Target newTarget)

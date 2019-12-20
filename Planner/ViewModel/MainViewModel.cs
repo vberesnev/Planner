@@ -522,6 +522,22 @@ namespace Planner.ViewModel
         }
         #endregion
 
+
+        #region Команда выполнения/отмены выполнения цели
+        private RelayCommand doneTargetCommand;
+        public RelayCommand DoneTargetCommand => doneTargetCommand;
+        public void DoneTarget(object obj)
+        {
+            Target target = obj as Target;
+            if (target != null)
+            {
+                TargetList.Done(target);
+                LoadMenuCounters();
+            } 
+        }
+        #endregion
+
+
         private RelayCommand addTargetTaskCommand;
         public RelayCommand AddTargetTaskCommand
         {
@@ -533,6 +549,7 @@ namespace Planner.ViewModel
                       if (!string.IsNullOrWhiteSpace(SelectedTargetTask.Name))
                       {
                           SelectedTarget.AddTask(SelectedTargetTask);
+                          LoadMenuCounters();
                           SelectedTargetTask = new TargetTask();
                       }
                   }));
@@ -551,6 +568,7 @@ namespace Planner.ViewModel
                       if (deleteTargetTask != null)
                       {
                           SelectedTarget.RemoveTask(deleteTargetTask);
+                          LoadMenuCounters();
                       }
                   }));
             }
@@ -650,6 +668,7 @@ namespace Planner.ViewModel
             setSelectedTargetImportantValueCommand = new RelayCommand(SetSelectedTargetImportantValue);
             undoCommand = new RelayCommand((obj) => undo = true); //команда Отмены удаления (ставит флаг undo в true)
             minimizeMaximizeItemCommand = new RelayCommand(MinimizeMaximizeItem);
+            doneTargetCommand = new RelayCommand(DoneTarget);
 
             addTargetCommand = new RelayCommand(AddTarget);
             deleteTargetCommand = new RelayCommand(DeleteTarget);
@@ -657,7 +676,7 @@ namespace Planner.ViewModel
             currentMenuItem = MenuItem.Year;
             FillYearList(DateTime.Now.Year);
             CurrentYear = yearsList.Current(DateTime.Now.Year);
-            TargetList.LoadCounters(CurrentYear.Data, CurrentMonth.Data.Key, CurrentWeek.Data.Key, CurrentDay.Data.Key);
+            LoadMenuCounters();
             SetMenuItem(0);
 
             LowImportantButtonColor = "Gray";
@@ -665,6 +684,15 @@ namespace Planner.ViewModel
             HighImportantButtonColor = "Gray";
 
             UndoVisibility = "Hidden";
+        }
+
+        private void LoadMenuCounters()
+        {
+            TargetList.LoadCounters(CurrentYear.Data, CurrentMonth.Data.Key, CurrentWeek.Data.Key, CurrentDay.Data.Key);
+            OnPropertyChanged("YearMenuValue");
+            OnPropertyChanged("MonthMenuValue");
+            OnPropertyChanged("WeekMenuValue");
+            OnPropertyChanged("DayMenuValue");
         }
 
         /// <summary>

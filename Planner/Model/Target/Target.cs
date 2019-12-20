@@ -138,7 +138,7 @@ namespace Planner.Model.Target
             Tasks.Remove(task);
         }
 
-        public void EditTask(Target newTarget)
+        public void EditTarget(Target newTarget)
         {
             this.Name = newTarget.Name;
             this.Description = newTarget.Description;

@@ -306,7 +306,10 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Grid.Column="0" Background="{Binding Path=BackColor}">
-                                    <CheckBox Grid.Column="2" IsChecked="{Binding Path=Done, Mode=TwoWay}"/>
+                                    <CheckBox Grid.Column="2" IsChecked="{Binding Path=Done, Mode=TwoWay}"
+                                              Command="{Binding ElementName=TargetsListBox, Path=DataContext.DoneTargetCommand}"
+                                              CommandParameter="{Binding }"
+                                              />
                                     
                                     <TextBlock Text="{Binding Path=Name}"/>
                                     <StackPanel x:Name="FullView" Visibility="{Binding Path=FullView}">

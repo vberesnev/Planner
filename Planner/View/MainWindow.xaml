@@ -4,8 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Planner"
+        xmlns:local1="clr-namespace:Planner.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+
+        
+    </Window.Resources>
+    
     <DockPanel LastChildFill="True" Background="Snow">
         <DockPanel DockPanel.Dock="Top"
                    LastChildFill="True"
@@ -20,8 +26,7 @@
                         FontWeight="Bold"
                         FontFamily="Luminari"
                        Foreground="DarkBlue"
-                        VerticalAlignment="Center">
-            </TextBlock>
+                        VerticalAlignment="Center"/>
             <Grid DockPanel.Dock="Right"
                         x:Name="ControlButtons"
                         Margin="5 0"
@@ -115,7 +120,7 @@
                     <Image Source="/Resources/one_arrow_left.png"
                        Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
-                
+
                 <TextBlock Style="{StaticResource NotSelectedCaruselTextBlockValue}" 
                        Text="{Binding CurrentYear.Previous.Data}"/>
                 <TextBlock Style="{StaticResource SelectedCaruselTextBlockValue}" 
@@ -155,7 +160,7 @@
                         Style="{StaticResource NotSelectedCaruselTextBlockValue}"
                        Text="{Binding CurrentMonth.Next.Data.Value}"/>
                 </Grid>
-                
+
                 <Button  Style="{StaticResource ControlButtonsStyle}"
                      Command="{Binding NextMonthCommand}">
                     <Image Source="/Resources/arrow_right.png"
@@ -271,17 +276,11 @@
             <TextBlock Text="{Binding TitleText}"
                        Style="{StaticResource TitleTextBlock}"/>
         </StackPanel>
-        
+
         <DockPanel DockPanel.Dock="Bottom"
                    x:Name="Footer"
                    Background="Blue"
                    Height="50">
-            <Button x:Name="UndoButton" Visibility="{Binding UndoVisibility}" Command="{Binding UndoCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Отмена" Margin="5"/>
-                    <TextBlock Text="{Binding UndoCounter}" Margin="5"/>
-                </StackPanel>
-            </Button>
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">
@@ -293,7 +292,7 @@
                      SelectedItem="{Binding SelectedTarget, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="1" BorderBrush="Red">
+                        <Border BorderThickness="1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="9*"/>
@@ -305,12 +304,13 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <StackPanel Grid.Column="0" Background="{Binding Path=BackColor}">
-                                    <CheckBox Grid.Column="2" IsChecked="{Binding Path=Done, Mode=TwoWay}"
+                                <StackPanel  Grid.Column="0">
+                                    <CheckBox Grid.Column="2" 
+                                              Style="{StaticResource CircleCheckbox}"
+                                              IsChecked="{Binding Path=Done, Mode=TwoWay}"
                                               Command="{Binding ElementName=TargetsListBox, Path=DataContext.DoneTargetCommand}"
-                                              CommandParameter="{Binding }"
-                                              />
-                                    
+                                              CommandParameter="{Binding }" />
+
                                     <TextBlock Text="{Binding Path=Name}"/>
                                     <StackPanel x:Name="FullView" Visibility="{Binding Path=FullView}">
                                         <TextBlock Text="{Binding Path=Description}"/>
@@ -330,13 +330,30 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
+            <Button x:Name="UndoButton" 
+                    Visibility="{Binding UndoVisibility}" 
+                    Command="{Binding UndoCommand}" 
+                    Panel.ZIndex="100"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    ToolTip="Отменить удаление"
+                    Style="{StaticResource RoundedCancelButtonStyle}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="Отмена" HorizontalAlignment="Center" Margin="0"/>
+                        <TextBlock Text="{Binding UndoCounter}" HorizontalAlignment="Center" Margin="0 2 0 0"/>
+                    </StackPanel>
+                </Button.Content>
+
+
+            </Button>
 
             <Button x:Name="PlusButton" 
                 Panel.ZIndex="100"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 ToolTip="Создать задачу"
-            Style="{StaticResource RoundedButtonStyle}"
+            Style="{StaticResource RoundedPlusButtonStyle}"
             Click="PlusButton_click">
                 <Image Source="/Resources/white_plus.png"
                 Width="30" Height="30"

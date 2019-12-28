@@ -45,6 +45,11 @@ namespace Planner.Model.Target
             Target = target;
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName]string prop = "")

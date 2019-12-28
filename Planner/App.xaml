@@ -246,13 +246,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
-                        <Grid Width="50" Height="25">
-                            <Rectangle x:Name="outherRect" RadiusX="10" RadiusY="10">
+                        <Grid Width="40" Height="20">
+                            <Rectangle x:Name="outherRect" RadiusX="8" RadiusY="8">
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="White"/>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Ellipse Width="20" Height="19" x:Name="highlightCircle" Margin="-25 0 0 0">
+                            <Ellipse Width="18" Height="18" x:Name="highlightCircle" Margin="-20 0 0 0">
                                 <Ellipse.Fill>
                                     <SolidColorBrush Color="White"/>
                                 </Ellipse.Fill>
@@ -266,7 +266,7 @@
                                         <SolidColorBrush Color="LightGreen"/>
                                     </Setter.Value>
                                 </Setter>
-                                <Setter TargetName="highlightCircle" Property="Margin" Value="25 0 0 0"/>
+                                <Setter TargetName="highlightCircle" Property="Margin" Value="20 0 0 0"/>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="False">
                                 <Setter TargetName="outherRect" Property="Fill">
@@ -274,7 +274,7 @@
                                         <SolidColorBrush Color="LightCoral"/>
                                     </Setter.Value>
                                 </Setter>
-                                <Setter TargetName="highlightCircle" Property="Margin" Value="-25 0 0 0"/>
+                                <Setter TargetName="highlightCircle" Property="Margin" Value="-20 0 0 0"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

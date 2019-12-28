@@ -20,7 +20,9 @@ namespace Planner.Model.Target
         private string name;
         public string Name
         { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
-        public string Description { get; set; }
+        private string description;
+        public string Description
+        { get { return description; } set { description = value; OnPropertyChanged("Description"); } }
         public TargetType TargetType { get; set; }
         //Год в котором поставлена цель
         public int Year { get; set; }
@@ -37,7 +39,7 @@ namespace Planner.Model.Target
         public bool ForAllUsers { get; set; }
         private bool done;
         public bool Done
-        { get { return done; } set { done = value; OnPropertyChanged("Done"); OnPropertyChanged("BackColor"); } }
+        { get { return done; } set { done = value; OnPropertyChanged("Done"); OnPropertyChanged("BackColor"); OnPropertyChanged("DoneColor"); } }
 
         private ObservableCollection<TargetTask> tasks;
         public ObservableCollection<TargetTask> Tasks { get { return tasks; } set { tasks = value; OnPropertyChanged("Tasks"); } }
@@ -51,16 +53,92 @@ namespace Planner.Model.Target
         public string FullView
         { get { return fullView; } set { fullView = value; OnPropertyChanged("FullView"); } }
 
+
+        private string minMaxViewButtonPath = @"/Resources/maximize_button.png";
+        [NotMapped]
+        public string MinMaxViewButtonPath
+        { get { return minMaxViewButtonPath; } set { minMaxViewButtonPath = value; OnPropertyChanged("MinMaxViewButtonPath"); } }
+
+        [NotMapped]
+        public string ImportantSymbol
+        {
+            get
+            {
+                switch (Important)
+                {
+                    case Important.High:
+                        return "!!!";
+                    case Important.Middle:
+                        return "!!";
+                    case Important.Low:
+                        return "!";
+                    case Important.None:
+                        return "";
+                    default:
+                        return "";
+                }
+            }
+        }
+
+        [NotMapped]
+        public string Deadline
+        {
+            get
+            {
+                string result = "Дата: ";
+                if (ProlongationDate == null)
+                {
+                    if (LastDate.Value.Date == DateTime.Now.Date)
+                        result += "сегодня, ";
+                    result += LastDate?.ToString("dd MMM.");
+                }
+                else
+                {
+                    if (ProlongationDate.Value.Date == DateTime.Now.Date)
+                        result += "сегодня, ";
+                    result += ProlongationDate?.ToString("dd MMM.");
+                }
+                return result;
+            }
+        }
+
         [NotMapped]
         public string BackColor
         {
             get
             {
+                if (!Done && LastDate < DateTime.Now) return "LightCoral";
+                else return "Black";
+            }
+        }
+
+        [NotMapped]
+        public string DoneColor
+        {
+            get
+            {
                 if (Done) return "LightGreen";
+                else return "LightCoral";
+            }
+        }
+        [NotMapped]
+        public string TargetTasksListVisability
+        {
+            get
+            {
+                if (this.Tasks.Count > 0)
+                    return "Visible";
+                return "Collapsed";
+            }
+        }
 
-                else if (LastDate < DateTime.Now) return "LightCoral";
-
-                else return "Transparent";
+        public string DescriptionVisibility
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Description))
+                    return "Visible";
+                return "Collapsed";
             }
         }
 
@@ -166,6 +244,11 @@ namespace Planner.Model.Target
             }
 
             this.Done = newTarget.Done;
+            OnPropertyChanged("ImportantSymbol");
+            OnPropertyChanged("Deadline");
+            OnPropertyChanged("BackColor");
+            OnPropertyChanged("TargetTasksListVisability");
+            OnPropertyChanged("DescriptionVisibility");
             //this.Tasks = newTarget.Tasks;
         }
 
@@ -175,9 +258,18 @@ namespace Planner.Model.Target
         public void ChangeView()
         {
             if (FullView == "Visible")
+            {
                 FullView = "Collapsed";
+                MinMaxViewButtonPath = @"/Resources/maximize_button.png";
+            }
+
             else
+            {
                 FullView = "Visible";
+                MinMaxViewButtonPath = @"/Resources/minimize_button.png";
+                
+            }
+                
         }
 
         private DateTime? GetDateFromSqliteFormat(string value)

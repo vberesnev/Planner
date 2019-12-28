@@ -355,7 +355,7 @@ namespace Planner.ViewModel
                 else
                     SelectedTarget.Important = (Important)parametr;
 
-                SetExclamationPointButton(parametr);
+                SetExclamationPointButton((int)SelectedTarget.Important);
             }
         }
 

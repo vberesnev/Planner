@@ -78,8 +78,6 @@
                     Click="MenuButton_Click"
                     Command="{Binding SetMenuItemCommand}"
                     CommandParameter="0" />
-
-
             <Button Uid="1" Grid.Column="1" Style="{StaticResource MenuButtonsStyle}" Content="{Binding MonthMenuValue}" 
                     Click="MenuButton_Click"
                     Command="{Binding SetMenuItemCommand}"
@@ -279,7 +277,7 @@
 
         <DockPanel DockPanel.Dock="Bottom"
                    x:Name="Footer"
-                   Background="Blue"
+                   Background="White"
                    Height="50">
         </DockPanel>
         <Grid DockPanel.Dock="Top"
@@ -289,41 +287,90 @@
                       Panel.ZIndex="{Binding InfoTextZIndex}"/>
             <ListBox x:Name="TargetsListBox"
                      ItemsSource="{Binding TargetList.Items}"
-                     SelectedItem="{Binding SelectedTarget, Mode=TwoWay}">
+                     SelectedItem="{Binding SelectedTarget, Mode=TwoWay}"
+                     Background="LightGray"
+                     BorderThickness="0">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <ContentPresenter 
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Content="{TemplateBinding Content}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    Margin="{TemplateBinding Padding}">
+                                        </ContentPresenter>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="1">
-                            <Grid>
+                        <Border BorderThickness="0" CornerRadius="5" BorderBrush="Red" Background="White" Margin="0 5">
+                            <Grid Width="500" Margin="0 5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="9*"/>
-                                    <ColumnDefinition Width="1*" MinWidth="30"/>
-                                    <ColumnDefinition Width="1*" MinWidth="30"/>
-                                    <ColumnDefinition Width="1*" MinWidth="30"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <StackPanel  Grid.Column="0">
-                                    <CheckBox Grid.Column="2" 
+                                <CheckBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"
                                               Style="{StaticResource CircleCheckbox}"
                                               IsChecked="{Binding Path=Done, Mode=TwoWay}"
                                               Command="{Binding ElementName=TargetsListBox, Path=DataContext.DoneTargetCommand}"
                                               CommandParameter="{Binding }" />
-
-                                    <TextBlock Text="{Binding Path=Name}"/>
-                                    <StackPanel x:Name="FullView" Visibility="{Binding Path=FullView}">
-                                        <TextBlock Text="{Binding Path=Description}"/>
-                                    </StackPanel>
-                                </StackPanel>
-                                <Button Grid.Column="1" Content="[x]" 
-                                Command="{Binding ElementName=TargetsListBox, Path=DataContext.DeleteTargetCommand}" 
-                                CommandParameter="{Binding }" />
-                                <Button Grid.Column="2" Content="[!]" 
+                                <TextBlock Grid.Column="1" Grid.Row="0"  Text="{Binding Path=Name}" VerticalAlignment="Center" FontSize="14" FontWeight="Medium" Margin="0 3"/>
+                                <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Path=ImportantSymbol}" 
+                                           VerticalAlignment="Top" FontSize="16" FontWeight="ExtraBold" Foreground="{Binding Path=DoneColor}" HorizontalAlignment="Right"/>
+                                <Button Grid.Column="3" Grid.Row="0"  Style="{StaticResource ControlButtonsStyle}" VerticalAlignment="Center"
                                 Command="{Binding ElementName=TargetsListBox, Path=DataContext.MinimizeMaximizeItemCommand}" 
-                                 CommandParameter="{Binding }"/>
-                                <Button Grid.Column="3" Content="[E]" Uid="{Binding Path=Id}"
-                                Click="EditButton_click"/>
+                                 CommandParameter="{Binding }">
+                                    <Image Width="20" Height="20" Source="{Binding Path=MinMaxViewButtonPath}"/>
+                                </Button>
+                                <StackPanel Grid.Column="1" Grid.Row="1" Margin="0"
+                                    x:Name="FullView" Visibility="{Binding Path=FullView}">
+                                  
+                                    <TextBlock Text="{Binding Path=Description}" Visibility="{Binding Path=DescriptionVisibility}"
+                                               TextWrapping="WrapWithOverflow" TextAlignment="Justify" Margin="0 5"/>
+                                    <TextBlock Text="{Binding Path=Deadline}" Foreground="{Binding Path=BackColor}"/>
+                                    <TextBlock Text="Задачи:" Visibility="{Binding TargetTasksListVisability}"/>
+                                    <ItemsControl  x:Name="TargetTasksListBox" 
+                                             BorderThickness="0"
+                                             ItemsSource="{Binding Path=Tasks}">
+
+                                    </ItemsControl>
+                                </StackPanel>
+                                <Button   Grid.Column="2" Grid.Row="1" Style="{StaticResource ControlButtonsStyle}" VerticalAlignment="Bottom"
+                                          Visibility="{Binding Path=FullView}"
+                                          Uid="{Binding Path=Id}" Click="EditButton_click">
+                                    <Image Width="20" Height="20" Source="/Resources/edit.png" ToolTip="Редактировать"/>
+                                </Button>
+                                <Button Grid.Column="3" Grid.Row="1" Style="{StaticResource ControlButtonsStyle}" VerticalAlignment="Bottom"
+                                        Visibility="{Binding Path=FullView}"
+                                        Command="{Binding ElementName=TargetsListBox, Path=DataContext.DeleteTargetCommand}" 
+                                        CommandParameter="{Binding }">
+                                    <Image Width="20" Height="20" Source="/Resources/delete.png" ToolTip="Удалить"/>
+                                </Button>
+
+
+                                <!--<StackPanel  Grid.Column="0">
+                                    
+
+                                    
+                                    
+                                </StackPanel>
+                                
+                                
+                                -->
                             </Grid>
                         </Border>
                     </DataTemplate>

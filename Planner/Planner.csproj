@@ -173,6 +173,14 @@
     <Resource Include="Resources\one_arrow_left.png" />
     <Resource Include="Resources\one_arrow_right.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\maximize_button.png" />
+    <Resource Include="Resources\minimize_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\delete.png" />
+    <Resource Include="Resources\edit.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -7,11 +7,7 @@
         xmlns:local1="clr-namespace:Planner.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
 
-        
-    </Window.Resources>
-    
     <DockPanel LastChildFill="True" Background="Snow">
         <DockPanel DockPanel.Dock="Top"
                    LastChildFill="True"
@@ -25,7 +21,7 @@
                         FontSize="24"
                         FontWeight="Bold"
                         FontFamily="Luminari"
-                       Foreground="DarkBlue"
+                       Foreground="Gray"
                         VerticalAlignment="Center"/>
             <Grid DockPanel.Dock="Right"
                         x:Name="ControlButtons"
@@ -103,44 +99,28 @@
             <Grid x:Name="MenuCell4" Grid.Column="4" Grid.Row="1"/>
             <Grid x:Name="MenuCell5" Grid.Column="5" Grid.Row="1"/>
         </Grid>
+        
+        
+        
         <Grid DockPanel.Dock="Top" x:Name="FilterGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition  Width="3*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0"
-              x:Name="YearFilterPanel"
-              Orientation="Horizontal"
-              Height="40"
-              Margin="20 5">
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                     Command="{Binding PreviousYearCommand}">
-                    <Image Source="/Resources/one_arrow_left.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+            <StackPanel Grid.Column="0" x:Name="YearFilterPanel" Orientation="Horizontal" Height="40" Margin="20 5">
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding PreviousYearCommand}">
+                    <Image Source="/Resources/one_arrow_left.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
-
-                <TextBlock Style="{StaticResource NotSelectedCaruselTextBlockValue}" 
-                       Text="{Binding CurrentYear.Previous.Data}"/>
-                <TextBlock Style="{StaticResource SelectedCaruselTextBlockValue}" 
-                       Text="{Binding CurrentYear.Data}"/>
-                <TextBlock Style="{StaticResource NotSelectedCaruselTextBlockValue}"
-                       Text="{Binding CurrentYear.Next.Data}"/>
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                     Command="{Binding NextYearCommand}">
-                    <Image Source="/Resources/one_arrow_right.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <TextBlock Style="{StaticResource NotSelectedCaruselTextBlockValue}"  Text="{Binding CurrentYear.Previous.Data}"/>
+                <TextBlock Style="{StaticResource SelectedCaruselTextBlockValue}"  Text="{Binding CurrentYear.Data}"/>
+                <TextBlock Style="{StaticResource NotSelectedCaruselTextBlockValue}" Text="{Binding CurrentYear.Next.Data}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding NextYearCommand}">
+                    <Image Source="/Resources/one_arrow_right.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
             </StackPanel>
-            <StackPanel Grid.Column="1"
-              x:Name="MonthFilterPanel"
-              Orientation="Horizontal"
-              Height="40"
-              Margin="10 5"
-              Visibility="Hidden">
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                     Command="{Binding PreviousMonthCommand}">
-                    <Image Source="/Resources/arrow_left.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+            <StackPanel Grid.Column="1" x:Name="MonthFilterPanel" Orientation="Horizontal" Height="40" Margin="10 5" Visibility="Hidden">
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding PreviousMonthCommand}">
+                    <Image Source="/Resources/one_arrow_left.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
                 <Grid Width="160">
                     <Grid.ColumnDefinitions>
@@ -148,40 +128,21 @@
                         <ColumnDefinition Width="1.5*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                        Style="{StaticResource NotSelectedCaruselTextBlockValue}" 
-                        Text="{Binding CurrentMonth.Previous.Data.Value}"/>
-                    <TextBlock Grid.Column="1" 
-                        Style="{StaticResource SelectedCaruselTextBlockValue}" 
-                       Text="{Binding CurrentMonth.Data.Value}"/>
-                    <TextBlock Grid.Column="2" 
-                        Style="{StaticResource NotSelectedCaruselTextBlockValue}"
-                       Text="{Binding CurrentMonth.Next.Data.Value}"/>
+                    <TextBlock Grid.Column="0" Style="{StaticResource NotSelectedCaruselTextBlockValue}"  Text="{Binding CurrentMonth.Previous.Data.Value}"/>
+                    <TextBlock Grid.Column="1" Style="{StaticResource SelectedCaruselTextBlockValue}"  Text="{Binding CurrentMonth.Data.Value}"/>
+                    <TextBlock Grid.Column="2"  Style="{StaticResource NotSelectedCaruselTextBlockValue}" Text="{Binding CurrentMonth.Next.Data.Value}"/>
                 </Grid>
-
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                     Command="{Binding NextMonthCommand}">
-                    <Image Source="/Resources/arrow_right.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding NextMonthCommand}">
+                    <Image Source="/Resources/one_arrow_right.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
             </StackPanel>
 
-            <StackPanel Grid.Column="1"
-              x:Name="WeekFilterPanel"
-              Orientation="Horizontal"
-              Height="40"
-              Margin="10 5"
-              Visibility="Hidden">
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                         Margin="0 0 7 0"
-                     Command="{Binding PreviousAnyWeeksCommand}">
-                    <Image Source="/Resources/double_arrow_left.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+            <StackPanel Grid.Column="1" x:Name="WeekFilterPanel" Orientation="Horizontal" Height="40" Margin="10 5" Visibility="Hidden">
+                <Button  Style="{StaticResource ControlButtonsStyle}" Margin="0 0 7 0" Command="{Binding PreviousAnyWeeksCommand}">
+                    <Image Source="/Resources/double_arrow_left.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                     Command="{Binding PreviousWeekCommand}">
-                    <Image Source="/Resources/arrow_left.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding PreviousWeekCommand}">
+                    <Image Source="/Resources/one_arrow_left.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
                 <Grid Width="160">
                     <Grid.ColumnDefinitions>
@@ -189,47 +150,24 @@
                         <ColumnDefinition Width="1.5*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                        Style="{StaticResource NotSelectedCaruselTextBlockValue}" 
-                        Text="{Binding CurrentWeek.Previous.Data.Value}"/>
-                    <TextBlock Grid.Column="1" 
-                        Style="{StaticResource SelectedCaruselTextBlockValue}" 
-                       Text="{Binding CurrentWeek.Data.Value}"/>
-                    <TextBlock Grid.Column="2" 
-                        Style="{StaticResource NotSelectedCaruselTextBlockValue}"
-                       Text="{Binding CurrentWeek.Next.Data.Value}"/>
+                    <TextBlock Grid.Column="0" Style="{StaticResource NotSelectedCaruselTextBlockValue}"  Text="{Binding CurrentWeek.Previous.Data.Value}"/>
+                    <TextBlock Grid.Column="1" Style="{StaticResource SelectedCaruselTextBlockValue}"  Text="{Binding CurrentWeek.Data.Value}"/>
+                    <TextBlock Grid.Column="2" Style="{StaticResource NotSelectedCaruselTextBlockValue}" Text="{Binding CurrentWeek.Next.Data.Value}"/>
                 </Grid>
-
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                     Command="{Binding NextWeekCommand}">
-                    <Image Source="/Resources/arrow_right.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding NextWeekCommand}">
+                    <Image Source="/Resources/one_arrow_right.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                         Margin="7 0 0 0"
-                     Command="{Binding NextAnyWeeksCommand}">
-                    <Image Source="/Resources/double_arrow_right.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Margin="7 0 0 0" Command="{Binding NextAnyWeeksCommand}">
+                    <Image Source="/Resources/double_arrow_right.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
             </StackPanel>
 
-            <StackPanel Grid.Column="1"
-              x:Name="DayFilterPanel"
-              Orientation="Horizontal"
-              Height="40"
-              Margin="10 5"
-              Visibility="Hidden">
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                         Margin="0 0 7 0"
-                     Command="{Binding PreviousAnyDaysCommand}">
-                    <Image Source="/Resources/double_arrow_left.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+            <StackPanel Grid.Column="1" x:Name="DayFilterPanel" Orientation="Horizontal" Height="40" Margin="10 5" Visibility="Hidden">
+                <Button  Style="{StaticResource ControlButtonsStyle}" Margin="0 0 7 0" Command="{Binding PreviousAnyDaysCommand}">
+                    <Image Source="/Resources/double_arrow_left.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                         
-                     Command="{Binding PreviousDayCommand}">
-                    <Image Source="/Resources/one_arrow_left.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding PreviousDayCommand}">
+                    <Image Source="/Resources/one_arrow_left.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
                 <Grid Width="175">
                     <Grid.ColumnDefinitions>
@@ -239,40 +177,23 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="0.8*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock  Grid.Column="0"
-                            Style="{StaticResource NotSelectedCaruselMiniTextBlockValue}" 
-                           Text="{Binding CurrentDay.Previous.Previous.Data.Value}"/>
-                    <TextBlock Grid.Column="1" 
-                        Style="{StaticResource NotSelectedCaruselTextBlockValue}" 
-                       Text="{Binding CurrentDay.Previous.Data.Value}"/>
-                    <TextBlock Grid.Column="2" 
-                        Style="{StaticResource SelectedCaruselTextBlockValue}" 
-                       Text="{Binding CurrentDay.Data.Value}"/>
-                    <TextBlock Grid.Column="3"
-                            Style="{StaticResource NotSelectedCaruselTextBlockValue}"
-                       Text="{Binding CurrentDay.Next.Data.Value}"/>
-                    <TextBlock Grid.Column="4" 
-                        Style="{StaticResource NotSelectedCaruselMiniTextBlockValue}"
-                       Text="{Binding CurrentDay.Next.Next.Data.Value}"/>
+                    <TextBlock Grid.Column="0"  Style="{StaticResource NotSelectedCaruselMiniTextBlockValue}"  Text="{Binding CurrentDay.Previous.Previous.Data.Value}"/>
+                    <TextBlock Grid.Column="1"  Style="{StaticResource NotSelectedCaruselTextBlockValue}"  Text="{Binding CurrentDay.Previous.Data.Value}"/>
+                    <TextBlock Grid.Column="2"  Style="{StaticResource SelectedCaruselTextBlockValue}"  Text="{Binding CurrentDay.Data.Value}"/>
+                    <TextBlock Grid.Column="3"  Style="{StaticResource NotSelectedCaruselTextBlockValue}" Text="{Binding CurrentDay.Next.Data.Value}"/>
+                    <TextBlock Grid.Column="4"  Style="{StaticResource NotSelectedCaruselMiniTextBlockValue}" Text="{Binding CurrentDay.Next.Next.Data.Value}"/>
                 </Grid>
-
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                     Command="{Binding NextDayCommand}">
-                    <Image Source="/Resources/one_arrow_right.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Command="{Binding NextDayCommand}">
+                    <Image Source="/Resources/one_arrow_right.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
-                <Button  Style="{StaticResource ControlButtonsStyle}"
-                         Margin="7 0 0 0"
-                     Command="{Binding NextAnyDaysCommand}">
-                    <Image Source="/Resources/double_arrow_right.png"
-                       Style="{StaticResource ArrowsButtonsImageStyle}"/>
+                <Button  Style="{StaticResource ControlButtonsStyle}" Margin="7 0 0 0" Command="{Binding NextAnyDaysCommand}">
+                    <Image Source="/Resources/double_arrow_right.png" Style="{StaticResource ArrowsButtonsImageStyle}"/>
                 </Button>
             </StackPanel>
         </Grid>
 
         <StackPanel DockPanel.Dock="Top" x:Name="TitlePanel">
-            <TextBlock Text="{Binding TitleText}"
-                       Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{Binding TitleText}" Style="{StaticResource TitleTextBlock}"/>
         </StackPanel>
 
         <DockPanel DockPanel.Dock="Bottom"
@@ -284,7 +205,12 @@
               x:Name="Content">
 
             <TextBlock Text="{Binding InfoText}"
-                      Panel.ZIndex="{Binding InfoTextZIndex}"/>
+                       Foreground="White"
+                       FontSize="24"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontWeight="Medium"
+                       Panel.ZIndex="{Binding InfoTextZIndex}"/>
             <ListBox x:Name="TargetsListBox"
                      ItemsSource="{Binding TargetList.Items}"
                      SelectedItem="{Binding SelectedTarget, Mode=TwoWay}"
@@ -311,7 +237,7 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="0" CornerRadius="5" BorderBrush="Red" Background="White" Margin="0 5">
+                        <Border BorderThickness="0" CornerRadius="5" BorderBrush="Red" Background="White" Margin="10 5" Visibility="{Binding Path=DeletingVisibility}">
                             <Grid Width="500" Margin="0 5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
@@ -360,17 +286,6 @@
                                         CommandParameter="{Binding }">
                                     <Image Width="20" Height="20" Source="/Resources/delete.png" ToolTip="Удалить"/>
                                 </Button>
-
-
-                                <!--<StackPanel  Grid.Column="0">
-                                    
-
-                                    
-                                    
-                                </StackPanel>
-                                
-                                
-                                -->
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -391,8 +306,6 @@
                         <TextBlock Text="{Binding UndoCounter}" HorizontalAlignment="Center" Margin="0 2 0 0"/>
                     </StackPanel>
                 </Button.Content>
-
-
             </Button>
 
             <Button x:Name="PlusButton" 

@@ -16,9 +16,6 @@ namespace Planner.Model.Target
         private string name;
         public string Name
         { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
-        private string description;
-        public string Description
-        { get { return description; } set { description = value; OnPropertyChanged("Description"); } }
         public bool Done { get; set; }
         public int? TargetId { get; set; }
 
@@ -28,19 +25,17 @@ namespace Planner.Model.Target
 
         public TargetTask() { }
 
-        public TargetTask(string name, string desc, Target target)
+        public TargetTask(string name, Target target)
         {
             Name = name;
-            Description = desc;
             Done = false;
             Target = target;
         }
 
-        private TargetTask(int id, string name, string desc, bool done, Target target)
+        private TargetTask(int id, string name, bool done, Target target)
         {
             Id = id;
             Name = name;
-            Description = desc;
             Done = done;
             Target = target;
         }
@@ -60,7 +55,7 @@ namespace Planner.Model.Target
 
         public TargetTask Clone()
         {
-            return new TargetTask(this.Id, this.Name, this.Description, this.Done, this.Target);
+            return new TargetTask(this.Id, this.Name, this.Done, this.Target);
         }
     }
 }

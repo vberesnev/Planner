@@ -67,28 +67,27 @@ namespace Planner.Model.Target
             YearTargetsCount = db.Targets.Where(x => x.Year == year && (int)x.TargetType == 365 && x.PeriodValue == year && x.Done == false).Count();
         }
 
+        internal void Load(bool done)
+        {
+            if (done)
+                Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
+                                                              .Include(u => u.Owner)
+                                                              .Where(x => x.Done == true)
+                                                              .ToList());
+            else
+                Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
+                                                             .Include(u => u.Owner)
+                                                             .Where(x => (x.LastDate < DateTime.Now && x.ProlongationDate == null && x.Done == false) ||
+                                                                         (x.ProlongationDate != null && x.ProlongationDate < DateTime.Now && x.Done == false))
+                                                             .ToList());
+        }
+
         public void LoadCounters(int yearPeriod, int monthPeriod, int weekPeriod, int dayPeriod)
         {
             YearTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 365 && x.PeriodValue == yearPeriod && x.Done == false).Count();
             MonthTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 30 && x.PeriodValue == monthPeriod && x.Done == false).Count();
             WeekTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 7 && x.PeriodValue == weekPeriod && x.Done == false).Count();
             DayTargetsCount = db.Targets.Where(x => x.Year == yearPeriod && (int)x.TargetType == 1 && x.PeriodValue == dayPeriod && x.Done == false).Count();
-        }
-
-        public void LoadDone()
-        {
-            Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
-                                                              .Include(u => u.Owner)
-                                                              .Where(x=> x.Done == true)
-                                                              .ToList());
-        }
-
-        public void LoadOverdue()
-        {
-            Items = new ObservableCollection<Target>(db.Targets.Include(t => t.Tasks)
-                                                              .Include(u => u.Owner)
-                                                              .Where(x => x.LastDate < DateTime.Now && x.Done == false)
-                                                              .ToList());
         }
 
         public void Add(Target item)

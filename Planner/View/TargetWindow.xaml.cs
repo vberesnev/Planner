@@ -80,5 +80,10 @@ namespace Planner.View
             brush = (Brush)brushConverter.ConvertFromString(((MainViewModel)this.DataContext).HighImportantButtonColor);
             ThirdExclamationPoint_button.Foreground = brush;
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -150,7 +150,11 @@ namespace Planner
             TW.DataContext = this.DataContext;
             ((MainViewModel)this.DataContext).CloseAction = TW.Close;
             if (!isNewTarget)
+            {
                 TW.ProlongationDate_datePicker.Visibility = Visibility.Visible;
+                TW.ProlongationDate_textBlock.Visibility = Visibility.Visible;
+            }
+                
             TW.ShowDialog();
         }
 

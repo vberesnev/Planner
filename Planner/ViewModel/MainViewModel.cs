@@ -40,6 +40,13 @@ namespace Planner.ViewModel
                     await Task.Run(() => Load(1, CurrentDay.Data.Key));
                     OnPropertyChanged("DayMenuValue");
                     break;
+                case MenuItem.Overdue:
+                    await Task.Run(() => Load(false));
+                    break;
+                case MenuItem.Done:
+                    await Task.Run(() => Load(true));
+                    break;
+
             }
             OnPropertyChanged("YearMenuValue");
         }
@@ -51,6 +58,21 @@ namespace Planner.ViewModel
                 InfoTextZIndex = 0;
             else
                 InfoText = "Целей нет, придумай что-нибудь";
+        }
+
+        private void Load(bool done)
+        {
+            TargetList.Load(done);
+            if (TargetList.Items.Count > 0)
+                InfoTextZIndex = 0;
+            else
+            {
+                if (done)
+                    InfoText = "Нет достигнутых целей, соберись, тряпка";
+                else
+                    InfoText = "Просроченных целей не найдено, так держать";
+            }
+                
         }
         #endregion
 
@@ -329,9 +351,11 @@ namespace Planner.ViewModel
                         break;
                     case 4:
                         currentMenuItem = MenuItem.Overdue;
+                        SetTargetList();
                         break;
                     case 5:
                         currentMenuItem = MenuItem.Done;
+                        SetTargetList();
                         break;
                 }
             }
@@ -453,15 +477,17 @@ namespace Planner.ViewModel
         
         private async void DeleteTarget(object obj)
         {
-            var result = await Task.Run(() => TikTak());
-            if (result)
+            Target deleteTarget = obj as Target;
+            if (deleteTarget != null)
             {
-                Target deleteTarget = obj as Target;
-                if (deleteTarget != null)
-                {
+                deleteTarget.ChangeItemVisibility();
+                var result = await Task.Run(() => TikTak());
+                if (result)
                     TargetList.Remove(deleteTarget);
-                }
+                else
+                    deleteTarget.ChangeItemVisibility();
             }
+            
         }
 
         private bool undo;

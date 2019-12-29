@@ -90,12 +90,20 @@ namespace Planner.Model.Target
                 {
                     if (LastDate.Value.Date == DateTime.Now.Date)
                         result += "сегодня, ";
+                    if (LastDate.Value.Date == DateTime.Now.AddDays(1).Date)
+                        result += "завтра, ";
+                    if (LastDate.Value.Date == DateTime.Now.AddDays(-1).Date)
+                        result += "вчера, ";
                     result += LastDate?.ToString("dd MMM.");
                 }
                 else
                 {
                     if (ProlongationDate.Value.Date == DateTime.Now.Date)
                         result += "сегодня, ";
+                    if (ProlongationDate.Value.Date == DateTime.Now.AddDays(1).Date)
+                        result += "завтра, ";
+                    if (ProlongationDate.Value.Date == DateTime.Now.AddDays(-1).Date)
+                        result += "вчера, ";
                     result += ProlongationDate?.ToString("dd MMM.");
                 }
                 return result;
@@ -131,7 +139,7 @@ namespace Planner.Model.Target
                 return "Collapsed";
             }
         }
-
+        [NotMapped]
         public string DescriptionVisibility
         {
             get
@@ -141,6 +149,11 @@ namespace Planner.Model.Target
                 return "Collapsed";
             }
         }
+
+        private string deletingVisibility = "Visible";
+        [NotMapped]
+        public string DeletingVisibility
+        { get { return deletingVisibility; } set { deletingVisibility = value; OnPropertyChanged("DeletingVisibility"); } }
 
 
         public Target() { }
@@ -267,9 +280,15 @@ namespace Planner.Model.Target
             {
                 FullView = "Visible";
                 MinMaxViewButtonPath = @"/Resources/minimize_button.png";
-                
             }
-                
+        }
+
+        public void ChangeItemVisibility()
+        {
+            if (DeletingVisibility == "Visible")
+                DeletingVisibility = "Collapsed";
+            else
+                DeletingVisibility = "Visible";
         }
 
         private DateTime? GetDateFromSqliteFormat(string value)

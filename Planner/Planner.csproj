@@ -181,6 +181,9 @@
     <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\edit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\plus_blue.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

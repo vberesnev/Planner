@@ -383,6 +383,11 @@ namespace Planner.ViewModel
             }
         }
 
+        public void SetExclamationPointNull()
+        {
+            SetExclamationPointButton(0);
+        }
+
         private void SetExclamationPointButton(int parametr)
         {
             LowImportantButtonColor = "Gray";
@@ -612,6 +617,18 @@ namespace Planner.ViewModel
             }
         }
 
+        private string targetTitleText;
+        public string TargetTitleText
+        {
+            get { return targetTitleText; }
+            set
+            {
+                targetTitleText = value;
+                OnPropertyChanged("TargetTitleText");
+            }
+        }
+        
+
         //Двунаправленные связанные списки (лет, месяцев, недель, дней). Нужны для каруселей выбора дат
         private DoublyNodeLinkedList<int> yearsList;
         private DoublyNodeLinkedList<DateValue> monthsList;
@@ -744,6 +761,7 @@ namespace Planner.ViewModel
                     break;
             }
             SelectedTargetTask = new TargetTask();
+            TargetTitleText = "Добавить новую цель";
         }
 
         public void SetNewSelectedTarget(int id)
@@ -751,6 +769,7 @@ namespace Planner.ViewModel
             SelectedTarget = TargetList.Items.FirstOrDefault(x => x.Id == id).Clone();
             SetExclamationPointButton((int)SelectedTarget.Important);
             SelectedTargetTask = new TargetTask();
+            TargetTitleText = $"{SelectedTarget.Name}";
         }
 
         /// <summary>

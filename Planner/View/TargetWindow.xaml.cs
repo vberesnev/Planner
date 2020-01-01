@@ -22,10 +22,6 @@ namespace Planner.View
     {
         private BrushConverter brushConverter = new BrushConverter();
 
-        private Brush FirstExclamationPointBrush;
-        private Brush SecondExclamationPointBrush;
-        private Brush ThirdExclamationPointBrush;
-
         public TargetWindow()
         {
             InitializeComponent();
@@ -84,6 +80,12 @@ namespace Planner.View
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            MainViewModel context = (MainViewModel)this.DataContext;
+            context.SetExclamationPointNull();
         }
     }
 }

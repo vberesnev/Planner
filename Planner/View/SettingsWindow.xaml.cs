@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Planner.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,15 @@ namespace Planner.View
         public SettingsWindow()
         {
             InitializeComponent();
+
+            var settingsVM = new SettingsViewModel();
+            settingsVM.CloseAction = () => this.Close();
+            this.DataContext = settingsVM;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

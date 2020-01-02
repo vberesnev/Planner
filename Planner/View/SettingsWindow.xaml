@@ -5,8 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Planner.View"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="300" Width="300" WindowStartupLocation="CenterOwner">
+        Title="SettingsWindow" Height="180" Width="300" WindowStartupLocation="CenterOwner" WindowStyle="None" ResizeMode="NoResize">
     <Grid>
-        
+        <DockPanel LastChildFill="True">
+            <DockPanel DockPanel.Dock="Top">
+                <TextBlock DockPanel.Dock="Left" Style="{StaticResource TitleTextBlock}"
+                           Text="Настройки"/>
+                <Button DockPanel.Dock="Right" Style="{StaticResource ControlButtonsStyle}" VerticalAlignment="Top"
+                     HorizontalAlignment="Right"
+                     Click="CloseButton_Click">
+                    <Image Source="/Resources/exit.png" Margin="0" Width="25" ToolTip="Выход"/>
+                </Button>
+            </DockPanel>
+
+
+            <Button DockPanel.Dock="Bottom" Content="Сохранить" HorizontalAlignment="Right"
+                         Style="{StaticResource DefaultButtonStyle}"
+                         Command="{Binding SaveSettingsCommand}"  />
+
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Длинный шаг недели" Style="{StaticResource DefaultTextBlock}" HorizontalAlignment="Left"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding WeekLongMoveParametr}" Style="{StaticResource DefaultTextBox}"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Длинный шаг дня" Style="{StaticResource DefaultTextBlock}" HorizontalAlignment="Left"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding DayLongMoveParametr}"
+                                        Style="{StaticResource DefaultTextBox}"/>
+            </Grid>
+           
+            
+            
+            
+
+
+           
+        </DockPanel>
     </Grid>
 </Window>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Planner"
         xmlns:local1="clr-namespace:Planner.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="700" Width="700" WindowStyle="None" WindowStartupLocation="CenterScreen">
 
     <DockPanel LastChildFill="True" Background="Snow">
         <DockPanel DockPanel.Dock="Top"
@@ -59,12 +59,12 @@
         </DockPanel>
         <Grid DockPanel.Dock="Top" Height="45" x:Name="Menu">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

@@ -25,20 +25,22 @@ namespace Planner
     {
         private int menuClickedIndex;
 
+        System.Windows.Forms.NotifyIcon ni;
         public MainWindow()
         {
             InitializeComponent();
 
             DataContext = new MainViewModel();
 
-            System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
+            ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("calendar.ico");
-            ni.Visible = true;
+            ni.Visible = false;
             ni.Click +=
                 delegate (object sender, EventArgs args)
                 {
                     this.Show();
                     this.WindowState = WindowState.Normal;
+                    ni.Visible = false;
                 };
 
             this.MenuCell0.Background = Brushes.CornflowerBlue;
@@ -47,6 +49,7 @@ namespace Planner
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+            ni.Visible = true;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

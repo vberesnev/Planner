@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Planner"
         xmlns:local1="clr-namespace:Planner.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="700" WindowStyle="None" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="700" Width="700" WindowStyle="None" WindowStartupLocation="CenterScreen"
+        >
 
     <DockPanel LastChildFill="True" Background="Snow">
         <DockPanel DockPanel.Dock="Top"
@@ -35,7 +36,8 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
                         Style="{StaticResource ControlButtonsStyle}"
-                        Click="SettingsButton_Click">
+                        Click="SettingsButton_Click"
+                        Command="{Binding UpdateInfoCommand}">
                     <Image Source="/Resources/settings.png"
                        Style="{StaticResource ControlButtonsImageStyle}"
                        ToolTip="Настройки"/>
@@ -199,7 +201,12 @@
         <DockPanel DockPanel.Dock="Bottom"
                    x:Name="Footer"
                    Background="White"
-                   Height="50">
+                   Height="60">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBlock Text="{Binding Path=TargetList.Info}" VerticalAlignment="Center" Margin="20 3" FontWeight="Medium"/>
+            </ScrollViewer>
+            
+
         </DockPanel>
         <Grid DockPanel.Dock="Top"
               x:Name="Content">

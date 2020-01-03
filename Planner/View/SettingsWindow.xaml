@@ -38,6 +38,9 @@
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="Длинный шаг дня" Style="{StaticResource DefaultTextBlock}" HorizontalAlignment="Left"/>
                 <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding DayLongMoveParametr}"
                                         Style="{StaticResource DefaultTextBox}"/>
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Дни для информирования" Style="{StaticResource DefaultTextBlock}" HorizontalAlignment="Left"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding DaysBeforeTaskFinish}"
+                                        Style="{StaticResource DefaultTextBox}"/>
             </Grid>
            
             

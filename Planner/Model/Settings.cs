@@ -25,6 +25,7 @@ namespace Planner.Model
 
         public int DayLongMoveParametr { get; set; }
         public int WeekLongMoveParametr { get; set; }
+        public int DaysBeforeTaskFinish { get; set; }
 
         private Settings() { }
 
@@ -37,6 +38,7 @@ namespace Planner.Model
                     instance = new Settings();
                     instance.DayLongMoveParametr = 10;
                     instance.WeekLongMoveParametr = 5;
+                    instance.DaysBeforeTaskFinish = 3;
                     Save();
                 }
             }

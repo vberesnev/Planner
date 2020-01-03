@@ -34,6 +34,17 @@ namespace Planner.ViewModel
             }
         }
 
+        private int daysBeforeTaskFinish;
+        public int DaysBeforeTaskFinish
+        {
+            get { return daysBeforeTaskFinish; }
+            set
+            {
+                daysBeforeTaskFinish = value;
+                OnPropertyChanged("DaysBeforeTaskFinish");
+            }
+        }
+
         public Action CloseAction { get; set; }
 
         private RelayCommand saveSettingsCommand;
@@ -43,7 +54,7 @@ namespace Planner.ViewModel
         {
             DayLongMoveParametr  = Settings.GetSettings().DayLongMoveParametr;
             WeekLongMoveParametr = Settings.GetSettings().WeekLongMoveParametr;
-
+            DaysBeforeTaskFinish = Settings.GetSettings().DaysBeforeTaskFinish;
             saveSettingsCommand = new RelayCommand(SaveSettings);
         }
 
@@ -51,6 +62,7 @@ namespace Planner.ViewModel
         {
             Settings.GetSettings().DayLongMoveParametr = DayLongMoveParametr;
             Settings.GetSettings().WeekLongMoveParametr = WeekLongMoveParametr;
+            Settings.GetSettings().DaysBeforeTaskFinish = DaysBeforeTaskFinish;
             Settings.Save();
             CloseAction();
         }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Planner.Model;
 
 namespace Planner.Model.Target
 {
@@ -36,11 +37,19 @@ namespace Planner.Model.Target
         private int dayTargetsCount;
         public int DayTargetsCount { get { return dayTargetsCount; } set { dayTargetsCount = value; OnPropertyChanged("DayTargetsCount"); } }
 
+        public string info;
+        public string Info
+        {
+            get { return info; }
+            set { info = value; OnPropertyChanged("Info"); }
+        }
+
         private PlannerContext db;
 
         public TargetList()
         {
             db = new PlannerContext();
+            GetInfoMessage();
         } 
 
         public void Load(int year, int targetType, int periodValue)
@@ -125,6 +134,35 @@ namespace Planner.Model.Target
             Save();
         }
 
+        private void GetInfoMessage()
+        {
+            DateTime date = DateTime.Now.AddDays(Settings.GetSettings().DaysBeforeTaskFinish).Date;
+            List<Target> list = db.Targets.Where(x => x.Done == false
+                                            &&( 
+                                                (x.ProlongationDate == null && x.LastDate <= date) ||
+                                                (x.ProlongationDate != null && x.ProlongationDate <= date)
+                                            )).ToList();
+            if (list.Count == 0)
+                Info = $"В ближайшие {Settings.GetSettings().DaysBeforeTaskFinish} дня не заканчивается ни одной цели";
+            else
+            {
+                StringBuilder stringBuilder = new StringBuilder($"В ближайшие {Settings.GetSettings().DaysBeforeTaskFinish} дня заканчиваются цели ({list.Count}):\r\n");
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    stringBuilder.Append($"{i + 1} - {list[i].Name}");
+                    if (i + 1 < list.Count)
+                        stringBuilder.Append("\r\n");
+                }
+                Info = stringBuilder.ToString();
+            }
+        }
+
+        public void UpdateInfo()
+        {
+            GetInfoMessage();
+        }
+
         private List<TargetTask> GetRemovebleTargerTasksList(Target oldTarget, Target newTarget)
         {
             List<TargetTask> list = new List<TargetTask>();
@@ -146,6 +184,7 @@ namespace Planner.Model.Target
         private void Save()
         {
             db.SaveChanges();
+            GetInfoMessage();
         }
 
 

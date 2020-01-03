@@ -362,6 +362,19 @@ namespace Planner.ViewModel
         }
         #endregion
 
+        #region Команда обновления информации в футере
+        private RelayCommand updateInfoCommand;
+        public RelayCommand UpdateInfoCommand => updateInfoCommand;
+
+        private void UpdateInfo(object obj)
+        {
+            TargetList.UpdateInfo();
+        }
+
+
+        #endregion
+
+
         #region Команда установки восклицательного знака в зависимости от важности цели
         private RelayCommand setSelectedTargetImportantValueCommand;
         public RelayCommand SetSelectedTargetImportantValueCommand => setSelectedTargetImportantValueCommand;
@@ -712,6 +725,7 @@ namespace Planner.ViewModel
             undoCommand = new RelayCommand((obj) => undo = true); //команда Отмены удаления (ставит флаг undo в true)
             minimizeMaximizeItemCommand = new RelayCommand(MinimizeMaximizeItem);
             doneTargetCommand = new RelayCommand(DoneTarget);
+            updateInfoCommand = new RelayCommand(UpdateInfo);
 
             addTargetCommand = new RelayCommand(AddTarget);
             deleteTargetCommand = new RelayCommand(DeleteTarget);

@@ -56,7 +56,7 @@ namespace Planner
 
         private string GetMessageText()
         {
-            DateTime now = DateTime.Parse("2020-02-29");
+            DateTime now = DateTime.Now;
             if ( (DateTime.IsLeapYear(now.Year) && now.Month == 2 && now.Day == 29)  ||
                  (!DateTime.IsLeapYear(now.Year) && now.Month == 2 && now.Day == 28) ||
                  (now.Day == 30 && (now.Month == 4 || now.Month == 6 || now.Month == 9 || now.Month == 11)) ||

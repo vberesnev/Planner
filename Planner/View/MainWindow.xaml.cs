@@ -44,6 +44,28 @@ namespace Planner
                 };
 
             this.MenuCell0.Background = Brushes.CornflowerBlue;
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            string result = GetMessageText();
+            if (result != null)
+                MessageBox.Show(result, "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private string GetMessageText()
+        {
+            DateTime now = DateTime.Now;
+            if ( (DateTime.IsLeapYear(now.Year) && now.Month == 2 && now.Day == 29)  ||
+                 (!DateTime.IsLeapYear(now.Year) && now.Month == 2 && now.Day == 28) ||
+                 (now.Day == 30 && (now.Month == 4 || now.Month == 6 || now.Month == 9 || now.Month == 11)) ||
+                 (now.Day == 31 && (now.Month == 1 || now.Month == 3 || now.Month == 5 || now.Month == 7 || now.Month == 8 || now.Month == 10))
+                )
+                return $"Сегодня, {now.ToString("dd MMMM")}, последний день месяца.\r\nЗаполните планы на следующий месяц.";
+            else if (now.Day > 24 && now.Month == 12)
+                return $"{now.Year} год подходит к концу.\r\nЗаполните планы на новый год.";
+            else return null;
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)

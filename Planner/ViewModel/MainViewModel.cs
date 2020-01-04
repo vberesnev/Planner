@@ -370,6 +370,8 @@ namespace Planner.ViewModel
         {
             TargetList.UpdateInfo();
         }
+
+
         #endregion
 
 
@@ -628,7 +630,6 @@ namespace Planner.ViewModel
             }
         }
 
-        //Текст заголовка в окне цели
         private string targetTitleText;
         public string TargetTitleText
         {
@@ -640,6 +641,7 @@ namespace Planner.ViewModel
             }
         }
         
+
         //Двунаправленные связанные списки (лет, месяцев, недель, дней). Нужны для каруселей выбора дат
         private DoublyNodeLinkedList<int> yearsList;
         private DoublyNodeLinkedList<DateValue> monthsList;
